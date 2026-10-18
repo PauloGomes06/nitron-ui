@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>nitron-ui — demonstração</title>
+<style>
+  body { margin: 0; padding: 24px; font: 13px/1.45 "Segoe UI", system-ui, sans-serif; background: #f4f6f9; color: #1c2733; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .botoes { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+  table { border-collapse: collapse; background: #fff; min-width: 520px; }
+  td, th { border: 1px solid #dde3ec; padding: 6px 10px; text-align: left; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  #testes li.ok { color: #1e7d32; } #testes li.falha { color: #c62828; font-weight: 600; }
+  label { display: block; font-weight: 600; margin: 8px 0 4px; } input { font: inherit; padding: 6px 8px; width: 100%; box-sizing: border-box; border: 1px solid #dde3ec; border-radius: 6px; }
+</style>
+</head>
+<body>
+<h1>nitron-ui <span id="versao"></span></h1>
+<div>Página de teste com o Sankhya simulado (não chama nada real).</div>
+
+<div class="botoes">
+  <button class="nui-bt nui-bt-primario" id="b-modal">Modal com formulário</button>
+  <button class="nui-bt nui-bt-perigo" id="b-confirmar">Confirmar exclusão</button>
+  <button class="nui-bt nui-bt-secundario" id="b-avisos">Avisos</button>
+  <button class="nui-bt nui-bt-secundario" id="b-carregando">Carregando (1,5 s)</button>
+</div>
+
+<table id="grade"><thead><tr><th>Data</th><th>Descrição</th><th>Valor</th></tr></thead><tbody></tbody></table>
+
+<h2 style="font-size:15px">Testes automáticos</h2>
+<ul id="testes"></ul>
+
+<script>
+/* ---- Sankhya simulado: responde /mge/service.sbr e mede concorrência ---- */
+(function () {
+  var emVoo = 0, maxEmVoo = 0, tentativasSalvar = 0;
+  window.__mock = { get maxEmVoo() { return maxEmVoo; }, ultimoCorpo: null };
+  function resp(obj) { return new Response(JSON.stringify(obj), { headers: { "content-type": "application/json; charset=utf-8" } }); }
+  window.fetch = async function (url, init) {
+    var corpo = JSON.parse(init.body);
+    window.__mock.ultimoCorpo = corpo;
+    emVoo++; maxEmVoo = Math.max(maxEmVoo, emVoo);
+    await new Promise(function (r) { setTimeout(r, 120); });
+    emVoo--;
+    var s = corpo.serviceName;
+    if (s === "CRUDServiceProvider.loadView") {
+      return resp({ status: "1", responseBody: { records: { record: [
+        { DTLANC: { $: "14/10/2026 00:00:00" }, HIST: { $: "CONCESSIONARIA DE AGUA 0000000000" }, VALOR: { $: "-38483.9" } },
+        { DTLANC: { $: "14/10/2026 00:00:00" }, HIST: { $: "DEP CHEQUE APP N. 000321" }, VALOR: { $: "3172.37" } },
+        { DTLANC: { $: "14/10/2026 00:00:00" }, HIST: { $: "PIX RECEBIDO CLIENTE EXEMPLO" }, VALOR: { $: "96.38" } }
+      ] } } });
+    }
+    if (s === "ActionButtonsSP.executeJava") return resp({ status: "2", statusMessage: "Lan%C3%A7amento%20gerado%3A%20NUFIN%20123", responseBody: {} });
+    if (s === "DatasetSP.save" && !corpo.requestBody.records[0].pk) {
+      // inclusão: o Sankhya devolve as linhas criadas, na ordem de fields, com a chave gerada
+      return resp({ status: "1", responseBody: { total: "1", result: [corpo.requestBody.fields.map(function (f, i) {
+        return f === "CODPARC" ? "4454" : (corpo.requestBody.records[0].values[String(i)] || "");
+      })] } });
+    }
+    if (s === "DatasetSP.removeRecord") {
+      var pk = corpo.requestBody.pks[0];
+      if (pk.CODPARC === "9") return resp({ status: "0", statusMessage: "Parceiro não existe: PK[9]" });
+      return resp({ status: "1", responseBody: {} });
+    }
+    if (s === "DatasetSP.save") {
+      tentativasSalvar++;
+      if (tentativasSalvar === 1) return resp({ status: "0", statusMessage: "<b>Regra Personalizada:</b><br>Conta inativa para a empresa 2." });
+      return resp({ status: "1", responseBody: {} });
+    }
+    return resp({ status: "0", statusMessage: "serviço desconhecido" });
+  };
+})();
+</script>
+<script src="../dist/nitron-ui.js"></script>
+<script>
+(async function () {
+  var S = Nitron.sankhya, U = Nitron.ui, F = Nitron.fmt;
+  document.getElementById("versao").textContent = Nitron.versao;
+  var lista = document.getElementById("testes");
+  function teste(nome, ok, detalhe) {
+    var li = document.createElement("li");
+    li.className = ok ? "ok" : "falha";
+    li.textContent = (ok ? "ok · " : "FALHOU · ") + nome + (detalhe ? " — " + detalhe : "");
+    lista.appendChild(li);
+  }
+
+  // 1. três leituras disparadas juntas passam pela fila uma por vez
+  var r = await Promise.all([
+    S.loadView("AD_VW_X", { campos: "DTLANC,HIST,VALOR", numericos: ["VALOR"] }),
+    S.loadView("AD_VW_X", { campos: ["DTLANC", "HIST", "VALOR"] }),
+    S.loadView("AD_VW_X", { campos: "DTLANC,HIST,VALOR", where: "VALOR > 0" })
+  ]);
+  teste("fila serial: no máximo 1 chamada por vez", __mock.maxEmVoo === 1, "máximo simultâneo = " + __mock.maxEmVoo);
+  teste("loadView devolve linhas", r[0].length === 3);
+  teste("numericos convertidos", typeof r[0][0].VALOR === "number" && r[0][0].VALOR === -38483.9);
+  var q = __mock.ultimoCorpo.requestBody.query;
+  teste("fields é UM objeto com CSV (mesmo vindo de array)", q.fields && q.fields.field && q.fields.field.$ === "DTLANC,HIST,VALOR");
+  teste("where enviado", q.where && q.where.$ === "VALOR > 0");
+
+  // 2. ação Java com mensagem (status 2) decodificada
+  var msg = await S.executarAcao(100, { NUFIN: 1, OBS: "" });
+  teste("executarAcao devolve a mensagem da ação", msg === "Lançamento gerado: NUFIN 123", msg);
+  var p = __mock.ultimoCorpo.requestBody.javaCall.params.param[0];
+  teste("P_DADOS sem campo vazio", p.paramName === "P_DADOS" && p.$ === "NUFIN=1");
+
+  // 3. erro do ERP vira mensagem limpa
+  try { await S.salvar("Financeiro", { NUFIN: 1 }, { CODCTABCOINT: 55 }); teste("erro do ERP lança exceção", false); }
+  catch (e) { teste("erro do ERP sem HTML nem 'Regra Personalizada'", e.message === "Conta inativa para a empresa 2.", e.message); }
+  var save = __mock.ultimoCorpo.requestBody;
+  teste("salvar monta fields e values por posição", save.fields.join() === "NUFIN,CODCTABCOINT" && save.records[0].values["1"] === "55");
+
+  // 4. inclusão devolve objeto com a chave gerada; remoção manda pks; registro inexistente dá erro
+  var novos = await S.inserir("Parceiro", { NOMEPARC: "Cliente Exemplo", ATIVO: "S" }, { retornar: ["CODPARC"] });
+  var ins = __mock.ultimoCorpo.requestBody;
+  teste("inserir vai sem pk e com o campo de retorno em fields", !ins.records[0].pk && ins.fields.join() === "CODPARC,NOMEPARC,ATIVO" && ins.records[0].values["1"] === "Cliente Exemplo");
+  teste("inserir devolve a chave gerada como objeto", novos.length === 1 && novos[0].CODPARC === "4454" && novos[0].NOMEPARC === "Cliente Exemplo", JSON.stringify(novos));
+  await S.inserir("Contato", { NOMECONTATO: "Fulano" }, { chavePai: { CODPARC: 4454 } });
+  teste("registro filho leva foreignKey", __mock.ultimoCorpo.requestBody.records[0].foreignKey.CODPARC === "4454");
+  var n = await S.remover("Parceiro", [{ CODPARC: 1 }, { CODPARC: 2 }]);
+  var rem = __mock.ultimoCorpo.requestBody;
+  teste("remover manda a lista de pks em texto", n === 2 && rem.entityName === "Parceiro" && rem.pks.length === 2 && rem.pks[1].CODPARC === "2");
+  try { await S.remover("Parceiro", { CODPARC: 9 }); teste("remover inexistente dá erro", false); }
+  catch (e) { teste("remover inexistente dá erro legível", e.message === "Parceiro não existe: PK[9]", e.message); }
+  teste("data vai no formato do Sankhya (hora de SP)", S.paraTexto(new Date("2026-10-18T17:05:09Z")) === "18/10/2026 14:05:09", S.paraTexto(new Date("2026-10-18T17:05:09Z")));
+
+  // 5. formatação na grade
+  var tb = document.querySelector("#grade tbody");
+  r[0].forEach(function (l) {
+    tb.insertAdjacentHTML("beforeend", "<tr><td>" + F.data(l.DTLANC) + "</td><td>" + U.esc(l.HIST) + '</td><td class="n">' + F.moeda(l.VALOR) + "</td></tr>");
+  });
+  teste("data do Sankhya formatada", F.data("14/10/2026 00:00:00") === "14/10/2026");
+
+  // botões da demonstração
+  document.getElementById("b-modal").onclick = function () {
+    U.modal({
+      titulo: "Trocar conta do título",
+      descricao: "Título 123 · R$ 1.250,00",
+      conteudo: '<label for="conta">Nova conta</label><input id="conta" value="55">',
+      botoes: [
+        { texto: "Cancelar", tipo: "secundario", acao: "fechar" },
+        { texto: "Salvar", tipo: "primario", acao: async function (m) {
+            await S.salvar("Financeiro", { NUFIN: 123 }, { CODCTABCOINT: m.corpo.querySelector("#conta").value });
+            U.avisar("Conta trocada.", "ok");
+        } }
+      ]
+    });
+  };
+  document.getElementById("b-confirmar").onclick = async function () {
+    var ok = await U.confirmar({ titulo: "Excluir lançamento", mensagem: "O lançamento de R$ 96,38 será excluído. Continuar?", confirmar: "Excluir", perigo: true });
+    U.avisar(ok ? "Excluído." : "Nada foi excluído.", ok ? "ok" : "atencao");
+  };
+  document.getElementById("b-avisos").onclick = function () {
+    U.avisar("Salvo.", "ok"); U.avisar("Extrato com 3 linhas sem parceiro.", "atencao"); U.avisar("Falha ao gravar: conta inativa. Clique para fechar.", "erro");
+  };
+  document.getElementById("b-carregando").onclick = function () {
+    var fim = U.carregando(document.getElementById("grade"), "Buscando extrato...");
+    setTimeout(fim, 1500);
+  };
+})();
+</script>
+</body>
+</html>

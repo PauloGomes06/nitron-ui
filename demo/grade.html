@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>nitron-ui — grade</title>
+<style>
+  html, body { height: 100%; }
+  body { margin: 0; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; font: 13px/1.45 "Segoe UI", system-ui, sans-serif; background: #f4f6f9; color: #1c2733; }
+  h1 { font-size: 16px; margin: 0; }
+  #lista { flex: 1; min-height: 0; }
+</style>
+</head>
+<body>
+<h1>Títulos a receber <small style="font-weight:400;color:#5c6b7c">(dados de teste)</small></h1>
+<div id="lista"></div>
+<script src="../dist/nitron-ui.js"></script>
+<script>
+  // 812 títulos fictícios, no formato que o Sankhya devolve
+  var parceiros = ["Comercial Aurora", "Distribuidora Horizonte", "Papelaria Modelo", "Loja Exemplo", "Atacado Central", "Varejo Boa Vista"];
+  var situacoes = ["LIBERADO", "AGUARDA_PRAZO", "AGUARDA_ENTREGA", "GERADO", "ATRASADO"];
+  var bancos = ["Banco Alfa", "Banco Beta", "Banco Gama"];
+  var linhas = [];
+  for (var i = 0; i < 812; i++) {
+    var dia = 1 + (i * 7) % 28, mes = 9 + (i % 3);
+    linhas.push({
+      NUFIN: 200100 + i,
+      NUMNOTA: 156000 + i * 3,
+      NOMEPARC: parceiros[i % parceiros.length],
+      DTVENC: String(dia).padStart(2, "0") + "/" + String(mes).padStart(2, "0") + "/2026 00:00:00",
+      VLRDESDOB: Math.round((350 + (i * 9137) % 48000) * 100) / 100,
+      BANCO: bancos[i % 3],
+      SITUACAO: situacoes[i % situacoes.length],
+      DHGERACAO: i % 5 === 3 ? "2026-10-1" + (i % 8) + "T14:3" + (i % 6) + ":00Z" : null
+    });
+  }
+
+  var g = Nitron.ui.grade(document.getElementById("lista"), {
+    id: "demo-titulos",
+    chave: "NUFIN",
+    selecao: true,
+    exportar: "titulos",
+    vazio: "Nenhum título a receber.",
+    colunas: [
+      { campo: "NUMNOTA", titulo: "Nota", tipo: "codigo" },
+      { campo: "NOMEPARC", titulo: "Cliente" },
+      { campo: "DTVENC", titulo: "Vencimento", tipo: "data" },
+      { campo: "VLRDESDOB", titulo: "Valor", tipo: "moeda", total: true },
+      { campo: "BANCO", titulo: "Banco" },
+      { campo: "SITUACAO", titulo: "Situação", tipo: "situacao", situacoes: {
+          LIBERADO: { texto: "Liberado", cor: "info" }, AGUARDA_PRAZO: { texto: "Aguarda prazo", cor: "neutro" },
+          AGUARDA_ENTREGA: { texto: "Aguarda entrega", cor: "atencao" }, GERADO: { texto: "Gerado", cor: "ok" },
+          ATRASADO: { texto: "Atrasado", cor: "erro" } } },
+      { campo: "DHGERACAO", titulo: "Gerado em", tipo: "dataHora" },
+      { campo: "NUFIN", titulo: "Nº único", tipo: "codigo", oculta: true }
+    ],
+    acoes: [{ texto: "Trocar conta", tipo: "primario", acao: async function (sel) {
+      var ok = await Nitron.ui.confirmar({ titulo: "Trocar conta", mensagem: sel.length + " título(s) vão para a outra conta. Continuar?", confirmar: "Trocar" });
+      if (ok) Nitron.ui.avisar(sel.length + " título(s) trocados (simulação).", "ok");
+    } }]
+  });
+  g.dados(linhas);
+  window.__g = g;
+</script>
+</body>
+</html>
