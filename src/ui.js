@@ -165,6 +165,11 @@
       try { if (window.parent.parent && window.parent.parent.document) docs.push(window.parent.parent.document); } catch (e) {}
       docs.forEach(function (doc) {
         try {
+          // Painel de filtro do dash pela estrutura: o nome ofuscado do GWT muda a cada versao
+          // (4.35 = GI-BUHVBCWC, 4.36 = GLVY3WB...). E o filho do .dyna-gadget com "Esconder ao atualizar".
+          $(".dyna-gadget", doc).children().each(function () {
+            if (/Esconder ao atualizar/.test(this.textContent || "")) this.style.display = "none";
+          });
           $(".GI-BUHVBCWC", doc).css("display", "none");
           $(".GI-BUHVBPVC", doc).css("padding", "0");
           $(".VCompactBar", doc).css("display", "none");

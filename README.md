@@ -4,10 +4,10 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.1.0/dist/nitron-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.1.1/dist/nitron-ui.js"></script>
 ```
 
-Fixe a versão (`@1.1.0`). A tela sobe de versão depois de testada na HML.
+Fixe a versão (`@1.1.1`). A tela sobe de versão depois de testada na HML.
 
 ## Uso
 
