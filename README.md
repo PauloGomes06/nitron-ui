@@ -4,10 +4,10 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.0.0/dist/nitron-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.1.0/dist/nitron-ui.js"></script>
 ```
 
-Fixe a versão (`@1.0.0`). A tela sobe de versão depois de testada na HML.
+Fixe a versão (`@1.1.0`). A tela sobe de versão depois de testada na HML.
 
 ## Uso
 
@@ -80,11 +80,12 @@ Já resolvido aqui, para nenhuma tela repetir:
 - **Uma chamada por vez** na sessão (o Sankhya cancela concorrentes).
 - Resposta em **ISO-8859-1** com os acentos certos.
 - `loadView` com `fields` no formato que o gateway respeita (lista em array é ignorada em silêncio).
+- **Sessão da janela** (`mgeSession`) em toda chamada: sem ela o Sankhya 4.36 recusa gravação de serviço de outro módulo ("Não autorizado").
 - Erro do ERP **sem HTML** e sem "Regra Personalizada:"; dentro do modal, aparece no próprio modal.
 - Datas no **fuso de São Paulo** (aceita o `DD/MM/AAAA HH:MM:SS` do Sankhya); vazio = `—`.
 - O Modal fecha com Esc, não fecha ao clicar fora e fica **bloqueado enquanto salva**.
 
-Configuração opcional: `S.configurar({ lote: 30, tamParam: 0 })`.
+Configuração opcional: `S.configurar({ lote: 30, tamParam: 0, mgeSession: false })` (`false` desliga o envio da sessão; um texto fixa o valor).
 
 ## Desenvolver
 

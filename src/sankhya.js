@@ -19,6 +19,18 @@
     return t.replace(/<br\s*\/?>/gi, " ").replace(/<[^>]+>/g, "").replace(/^\s*Regra Personalizada:\s*/i, "").trim();
   }
 
+  /* A sessão da janela do Sankhya. Gadget não recebe na URL: ela está no src dos iframes da janela principal.
+     Sem ela, gravação de serviço fora do /mge volta "Não autorizado" (ERP 4.36, ex.: conciliarChequesDespesasBancarios). */
+  function mgeSession() {
+    if (cfg.mgeSession === false) return "";
+    if (typeof cfg.mgeSession === "string") return cfg.mgeSession;
+    var achou = function (txt) { return (/mgeSession=([^&\s"#]+)/.exec(txt || "") || [])[1] || ""; };
+    try { var s = achou(window.location.search); if (s) return s; } catch (e) {}
+    try {
+      return achou(Array.prototype.map.call(window.top.document.querySelectorAll("iframe"), function (f) { return f.src; }).join(" "));
+    } catch (e) { return ""; }
+  }
+
   var fila = Promise.resolve();
   function enfileira(tarefa) {
     var p = fila.then(tarefa, tarefa);
@@ -31,6 +43,8 @@
     var o = opcoes || {};
     return enfileira(async function () {
       var url = cfg.apiBase + "/" + (o.modulo || "mge") + "/service.sbr?serviceName=" + serviceName + "&outputType=json";
+      var ms = serviceName.indexOf("mgeSession=") < 0 ? mgeSession() : "";
+      if (ms) url += "&mgeSession=" + ms;
       var resp = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -249,6 +263,7 @@
   N.sankhya = {
     configurar: function (o) { Object.assign(cfg, o || {}); return cfg; },
     servico: servico,
+    mgeSession: mgeSession,
     loadView: loadView,
     loadRecords: loadRecords,
     salvar: salvar,
