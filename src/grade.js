@@ -41,6 +41,14 @@
     var n = typeof v === "number" ? v : Number(String(v).replace(",", "."));
     return isFinite(n) ? n : null;
   }
+  // O que a pessoa digita no filtro: "1.000,50", "1000,5" ou "1000.5". Com vírgula, o ponto é milhar.
+  function numeroDigitado(s) {
+    s = String(s == null ? "" : s).replace(/[R$\s]/g, "");
+    if (!s) return null;
+    if (s.indexOf(",") >= 0 || /^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "").replace(",", ".");
+    var n = Number(s);
+    return isFinite(n) ? n : null;
+  }
   function ehNum(c) { return c.tipo === "num" || c.tipo === "moeda" || c.tipo === "pct" || c.tipo === "codigo"; }
   function ehData(c) { return c.tipo === "data" || c.tipo === "dataHora"; }
   function diaDe(v) { var d = F.paraData(v); return d ? F.data(d).split("/").reverse().join("-") : null; } // AAAA-MM-DD em SP
@@ -348,6 +356,8 @@
         var distintos = [];
         todas.forEach(function (l) { var v = l[c.campo] == null ? "" : String(l[c.campo]); if (distintos.indexOf(v) < 0) distintos.push(v); });
         var lista = c.tipo === "situacao" || (!ehNum(c) && !ehData(c) && distintos.length <= 12 && distintos.length > 1);
+        // Lista com um valor só não filtra nada (marcar tudo = sem filtro): não mostra a linha.
+        if (lista && distintos.length <= 1 && !f.valores) return;
         html += '<div class="nui-f-linha" data-i="' + i + '"><div class="nui-f-nome">' + nome + "</div><div>";
         if (lista) {
           distintos.sort().forEach(function (v) {
@@ -355,9 +365,11 @@
             html += '<label class="nui-f-op"><input type="checkbox" value="' + esc(v) + '"' + (marcado ? " checked" : "") + "> " + esc(texto(c, v, {})) + "</label>";
           });
         } else if (ehNum(c) || ehData(c)) {
-          var tipo = ehData(c) ? "date" : "number";
-          html += '<input class="nui-f-de" type="' + tipo + '" step="any" placeholder="de" value="' + esc(f.de == null ? "" : f.de) + '"> até ' +
-                  '<input class="nui-f-ate" type="' + tipo + '" step="any" placeholder="até" value="' + esc(f.ate == null ? "" : f.ate) + '">';
+          // Número em campo de texto: o type="number" descarta "1.000,00" em silêncio e o filtro não age.
+          var tipo = ehData(c) ? 'type="date"' : 'type="text" inputmode="decimal"';
+          var mostra = function (v) { return v == null ? "" : ehNum(c) ? String(v).replace(".", ",") : v; };
+          html += '<span class="nui-f-faixa"><input class="nui-f-de" ' + tipo + ' placeholder="de" value="' + esc(mostra(f.de)) + '"><span>até</span>' +
+                  '<input class="nui-f-ate" ' + tipo + ' placeholder="até" value="' + esc(mostra(f.ate)) + '"></span>';
         } else {
           html += '<input class="nui-f-contem" type="text" placeholder="contém..." value="' + esc(f.contem || "") + '">';
         }
@@ -378,7 +390,7 @@
           }
           var de = div.querySelector(".nui-f-de"), ate = div.querySelector(".nui-f-ate"), ct = div.querySelector(".nui-f-contem");
           if (de) {
-            var fd = ehNum(c) ? numero(de.value) : (de.value || null), fa = ehNum(c) ? numero(ate.value) : (ate.value || null);
+            var fd = ehNum(c) ? numeroDigitado(de.value) : (de.value || null), fa = ehNum(c) ? numeroDigitado(ate.value) : (ate.value || null);
             if (fd != null || fa != null) novos[c.campo] = { de: fd, ate: fa };
           } else if (ct && ct.value.trim()) novos[c.campo] = { contem: ct.value.trim() };
         });
