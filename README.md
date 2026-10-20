@@ -4,10 +4,10 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.1.1/dist/nitron-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.2.0/dist/nitron-ui.js"></script>
 ```
 
-Fixe a versão (`@1.1.1`). A tela sobe de versão depois de testada na HML.
+Fixe a versão (`@1.2.0`). A tela sobe de versão depois de testada na HML.
 
 ## Uso
 
@@ -60,6 +60,12 @@ Vem pronto: busca (sem acento), **Filtros** em modal montado pelas colunas (cont
 **filtros salvos com nome**, escolha de **Colunas**, ordenação no cabeçalho, total no rodapé sobre o filtrado,
 **paginação** (50/100/200 por página, guardado por pessoa; total e Excel sempre sobre tudo), seleção em massa com ações, e **Exportar Excel** (.xlsx com número, data e R$ de verdade, do que está na tela;
 o gerador só é baixado no clique, e se falhar sai CSV).
+
+Linha que não pode ser marcada: `selecionavel: (l) => l.NOSSONUM ? "Já tem boleto" : true` (não-`true` trava a caixinha;
+texto vira a dica; "marcar todas" pula as travadas). Filtro de fora da grade (cards, abas): `g.filtrar(fn)` /
+`g.filtrar(null)`, soma com busca e filtros; `g.semFiltroExterno()` devolve o que passa só nos filtros da grade (para
+contar os cards) e `aoAtualizar: (g) => ...` avisa a cada mudança. Célula com HTML: `html: (v, l) => "..."` na coluna
+(quem monta escapa); busca, filtro, ordem e Excel continuam no texto (`formatar` ou o tipo).
 
 Tipos de coluna: `texto` · `codigo` (nº de nota/título, sem separador de milhar) · `num` · `moeda` · `pct` ·
 `data` · `dataHora` · `situacao`. `formatar(v, linha)` sobrescreve a exibição.

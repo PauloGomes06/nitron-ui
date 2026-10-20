@@ -1,9 +1,9 @@
-/*! nitron-ui 1.1.1 — telas HTML5 do Sankhya da Nitron */
+/*! nitron-ui 1.2.0 — telas HTML5 do Sankhya da Nitron */
 (function () {
   if (window.Nitron && window.Nitron.versao) return;
-  window.Nitron = { versao: "1.1.1" };
+  window.Nitron = { versao: "1.2.0" };
   var s = document.createElement("style");
-  s.setAttribute("data-nitron-ui", "1.1.1");
+  s.setAttribute("data-nitron-ui", "1.2.0");
   s.textContent = ":root { --nui-fundo: #f4f6f9; --nui-painel: #ffffff; --nui-linha: #dde3ec; --nui-texto: #1c2733; --nui-suave: #5c6b7c; --nui-destaque: #0a6ea8; --nui-ok: #1e7d32; --nui-atencao: #b26a00; --nui-erro: #c62828; --nui-raio: 10px; --nui-fonte: 13px/1.45 \"Segoe UI\", system-ui, sans-serif; } .nui-fundo { position: fixed; inset: 0; z-index: 9000; background: rgba(28, 39, 51, .45); display: flex; align-items: center; justify-content: center; padding: 16px; animation: nui-aparece .12s ease-out; } .nui-modal { background: var(--nui-painel); color: var(--nui-texto); font: var(--nui-fonte); border-radius: var(--nui-raio); box-shadow: 0 12px 40px rgba(0, 0, 0, .25); width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; } .nui-p { max-width: 400px; } .nui-m { max-width: 560px; } .nui-g { max-width: 900px; } .nui-topo { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--nui-linha); } .nui-titulos { flex: 1; min-width: 0; } .nui-titulo { font-size: 15px; font-weight: 700; } .nui-descricao { color: var(--nui-suave); margin-top: 2px; } .nui-x { border: 0; background: none; font-size: 22px; line-height: 1; color: var(--nui-suave); cursor: pointer; padding: 0 4px; border-radius: 6px; } .nui-x:hover:not(:disabled) { background: var(--nui-fundo); color: var(--nui-texto); } .nui-corpo { padding: 16px 18px; overflow-y: auto; } .nui-msg { margin: 0; } .nui-erro { margin: 0 18px 12px; padding: 8px 10px; border-radius: 6px; background: #fdecea; color: var(--nui-erro); } .nui-rodape { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--nui-linha); background: #fafbfc; } .nui-bt { font: inherit; font-weight: 600; border-radius: 6px; padding: 7px 16px; cursor: pointer; border: 1px solid transparent; } .nui-bt:disabled { opacity: .55; cursor: not-allowed; } .nui-bt-primario { background: var(--nui-destaque); color: #fff; } .nui-bt-perigo { background: var(--nui-erro); color: #fff; } .nui-bt-secundario { background: #fff; color: var(--nui-texto); border-color: var(--nui-linha); } .nui-bt-secundario:hover:not(:disabled) { background: var(--nui-fundo); } .nui-girando::before, .nui-roda { content: \"\"; display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: nui-gira .7s linear infinite; vertical-align: -2px; margin-right: 6px; } .nui-avisos { position: fixed; right: 16px; bottom: 16px; z-index: 9100; display: flex; flex-direction: column; gap: 8px; max-width: 380px; font: var(--nui-fonte); } .nui-aviso { padding: 10px 14px; border-radius: 8px; color: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, .2); cursor: pointer; animation: nui-aparece .15s ease-out; } .nui-aviso-ok { background: var(--nui-ok); } .nui-aviso-erro { background: var(--nui-erro); } .nui-aviso-atencao { background: var(--nui-atencao); } .nui-carregando { position: absolute; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 4px; background: rgba(255, 255, 255, .75); color: var(--nui-suave); font: var(--nui-fonte); } .nui-carregando.nui-tela { position: fixed; z-index: 8900; } @keyframes nui-gira { to { transform: rotate(360deg); } } @keyframes nui-aparece { from { opacity: 0; } to { opacity: 1; } } .nui-grade { display: flex; flex-direction: column; min-height: 0; background: var(--nui-painel); border: 1px solid var(--nui-linha); border-radius: var(--nui-raio); font: var(--nui-fonte); color: var(--nui-texto); } .nui-g-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--nui-linha); } .nui-g-busca { font: inherit; padding: 6px 10px; border: 1px solid var(--nui-linha); border-radius: 6px; min-width: 200px; } .nui-g-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--nui-linha); background: #fafbfc; } .nui-g-acoes { margin-left: auto; } .nui-g-acoes { display: flex; gap: 6px; } .nui-chip { display: inline-flex; align-items: center; gap: 4px; background: #e3effa; color: #0a4f78; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12px; } .nui-chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 4px; border-radius: 50%; } .nui-chip button:hover { background: rgba(10, 110, 168, .15); } .nui-g-limpar { border: 0; background: none; color: var(--nui-destaque); cursor: pointer; font: inherit; font-size: 12px; text-decoration: underline; } .nui-g-rolagem { overflow: auto; flex: 1; min-height: 0; } .nui-grade table { width: 100%; border-collapse: separate; border-spacing: 0; } .nui-grade th { position: sticky; top: 0; z-index: 1; background: #eef2f7; text-align: left; font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--nui-linha); white-space: nowrap; cursor: pointer; user-select: none; } .nui-grade th:hover { background: #e3e9f1; } .nui-grade td { padding: 7px 10px; border-bottom: 1px solid #edf0f4; white-space: nowrap; } .nui-grade tbody tr:hover td { background: #f7f9fc; } .nui-grade tfoot td { position: sticky; bottom: 0; background: #f7f9fc; font-weight: 700; border-top: 1px solid var(--nui-linha); } .nui-grade .nui-dir { text-align: right; font-variant-numeric: tabular-nums; } .nui-g-ck { width: 32px; text-align: center; } .nui-g-marcada td { background: #e3effa !important; } .nui-g-clicavel { cursor: pointer; } .nui-g-vazio { text-align: center; color: var(--nui-suave); padding: 28px !important; white-space: normal !important; } .nui-g-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; color: var(--nui-suave); border-top: 1px solid var(--nui-linha); font-size: 12px; } .nui-g-pag { display: flex; align-items: center; gap: 4px; } .nui-g-pag label { margin-right: 8px; } .nui-g-pag select { font: inherit; padding: 2px 4px; border: 1px solid var(--nui-linha); border-radius: 4px; } .nui-g-ir { font: inherit; font-size: 14px; width: 28px; height: 26px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; color: var(--nui-texto); } .nui-g-ir:disabled { opacity: .4; cursor: default; } .nui-g-npag { padding: 0 6px; white-space: nowrap; } .nui-sit { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; } .nui-sit-ok { background: #e6f4ea; color: var(--nui-ok); } .nui-sit-atencao { background: #fff3e0; color: var(--nui-atencao); } .nui-sit-erro { background: #fdecea; color: var(--nui-erro); } .nui-sit-info { background: #e3effa; color: var(--nui-destaque); } .nui-sit-neutro { background: #eef2f7; color: var(--nui-suave); } .nui-filtros { display: flex; flex-direction: column; gap: 10px; } .nui-f-linha { display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: start; } .nui-f-nome { font-weight: 600; padding-top: 5px; } .nui-f-linha input[type=text], .nui-f-linha input[type=number], .nui-f-linha input[type=date], .nui-f-salvar input { font: inherit; padding: 5px 8px; border: 1px solid var(--nui-linha); border-radius: 6px; } .nui-f-linha input[type=number], .nui-f-linha input[type=date] { width: 150px; } .nui-f-linha input[type=text] { width: 100%; box-sizing: border-box; } .nui-f-op { display: inline-flex; align-items: center; gap: 4px; margin: 2px 12px 2px 0; cursor: pointer; } .nui-f-salvos { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--nui-linha); } .nui-f-lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .nui-chip-salvo { background: #eef2f7; color: var(--nui-texto); padding: 2px 4px 2px 2px; } .nui-chip-salvo .nui-f-usar { font: inherit; font-size: 12px; padding: 2px 8px; border-radius: 999px; } .nui-f-dica { color: var(--nui-suave); } .nui-f-salvar { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--nui-linha); } .nui-f-salvar input { flex: 1; } .nui-colunas { display: flex; flex-direction: column; margin-top: 8px; }";
   (document.head || document.documentElement).appendChild(s);
 })();
@@ -606,9 +606,14 @@
      exportar: "titulos-receber",          // nome do arquivo; false esconde o botão
      vazio: "Nenhum título nesta situação.",
      tamPagina: 50,                        // 50 | 100 | 200; a pessoa troca e fica guardado
-     aoClicar: (linha) => {...}
+     aoClicar: (linha) => {...},
+     selecionavel: (linha) => linha.NOSSONUM ? "Já tem boleto" : true,   // não-true trava a caixinha; texto vira a dica
+     aoAtualizar: (g) => {...}             // depois de cada filtro/busca/carga (ex.: recontar cards de fora)
    });
    g.dados(linhas);   g.selecionadas();   g.visiveis();
+   g.filtrar((linha) => ...);   g.filtrar(null);   g.semFiltroExterno();   // filtro de fora (cards), soma com os da grade
+
+   Coluna com `html(v, linha)`: o HTML da célula (já escapado por quem monta); busca, filtro, ordem e Excel usam o texto.
 
    Tipos: texto (padrão) · codigo (nº de nota/título, sem separador) · num · moeda · pct · data · dataHora · situacao.  `formatar(v, linha)` sobrescreve a exibição. */
 (function (N) {
@@ -642,6 +647,7 @@
     }
   }
   function celula(c, v, linha) {
+    if (c.html) return c.html(v, linha);
     if (c.tipo === "situacao") {
       var s = (c.situacoes || {})[v];
       return '<span class="nui-sit nui-sit-' + (s && s.cor ? s.cor : "neutro") + '">' + esc(texto(c, v, linha)) + "</span>";
@@ -653,7 +659,8 @@
     var cols = o.colunas || [];
     var porCampo = {};
     cols.forEach(function (c) { porCampo[c.campo] = c; });
-    var todas = [], vis = [], sel = {}, busca = "", pagina = 1;
+    var todas = [], vis = [], sel = {}, busca = "", pagina = 1, externo = null;
+    function podeMarcar(l) { return !o.selecionavel || o.selecionavel(l) === true; }
     // o que a pessoa configura (e o que é guardado): filtros = { CAMPO: { de, ate, contem, valores } }
     var estado = {
       ocultas: cols.filter(function (c) { return c.oculta; }).map(function (c) { return c.campo; }),
@@ -732,17 +739,20 @@
       });
       var todos = thead.querySelector(".nui-g-todos");
       if (todos) {
-        var marcadas = vis.filter(function (l) { return sel[l[o.chave]]; }).length;
-        todos.checked = vis.length > 0 && marcadas === vis.length;
-        todos.indeterminate = marcadas > 0 && marcadas < vis.length;
+        var marcaveis = vis.filter(podeMarcar);
+        var marcadas = marcaveis.filter(function (l) { return sel[l[o.chave]]; }).length;
+        todos.checked = marcaveis.length > 0 && marcadas === marcaveis.length;
+        todos.indeterminate = marcadas > 0 && marcadas < marcaveis.length;
+        todos.disabled = !marcaveis.length;
         todos.onchange = function () {
-          vis.forEach(function (l) { if (todos.checked) sel[l[o.chave]] = l; else delete sel[l[o.chave]]; });
+          marcaveis.forEach(function (l) { if (todos.checked) sel[l[o.chave]] = l; else delete sel[l[o.chave]]; });
           desenha();
         };
       }
     }
 
-    function passa(l) {
+    function passa(l, semExterno) {
+      if (externo && !semExterno && !externo(l)) return false;
       if (busca) {
         var ok = vcols().some(function (c) { return norm(texto(c, l[c.campo], l)).indexOf(busca) >= 0; });
         if (!ok) return false;
@@ -767,7 +777,7 @@
     // manter = true só quando os dados são recarregados; filtro, busca e ordem voltam para a página 1
     function aplica(manter) {
       if (!manter) pagina = 1;
-      vis = todas.filter(passa);
+      vis = todas.filter(function (l) { return passa(l); });
       var ord = estado.ordem, c = ord && porCampo[ord.campo];
       if (c) {
         var m = ord.asc ? 1 : -1;
@@ -791,7 +801,11 @@
       mostra.forEach(function (l, idx) {
         var k = l[o.chave];
         h += '<tr data-idx="' + idx + '"' + (sel[k] ? ' class="nui-g-marcada"' : "") + ">";
-        if (o.selecao) h += '<td class="nui-g-ck"><input type="checkbox"' + (sel[k] ? " checked" : "") + "></td>";
+        if (o.selecao) {
+          var pode = o.selecionavel ? o.selecionavel(l) : true;
+          h += '<td class="nui-g-ck"><input type="checkbox"' + (sel[k] ? " checked" : "") +
+               (pode === true ? "" : " disabled" + (typeof pode === "string" ? ' title="' + esc(pode) + '"' : "")) + "></td>";
+        }
         vc.forEach(function (c) { h += '<td class="' + (ehNum(c) && c.tipo !== "codigo" ? "nui-dir" : "") + '">' + celula(c, l[c.campo], l) + "</td>"; });
         h += "</tr>";
       });
@@ -825,6 +839,7 @@
       } else tfoot.innerHTML = "";
 
       desenhaChips(); atualizaAcoes(); rodapeTexto();
+      if (o.aoAtualizar) o.aoAtualizar(api);
     }
 
     function rodapeTexto() {
@@ -1073,7 +1088,7 @@
       dados: function (linhas) {
         todas = linhas || [];
         var existe = {};
-        todas.forEach(function (l) { existe[l[o.chave]] = l; });
+        todas.forEach(function (l) { if (podeMarcar(l)) existe[l[o.chave]] = l; });
         Object.keys(sel).forEach(function (k) { if (existe[k]) sel[k] = existe[k]; else delete sel[k]; });
         aplica(true);
         return api;
@@ -1081,6 +1096,8 @@
       selecionadas: selecionadas,
       limparSelecao: function () { sel = {}; desenha(); },
       visiveis: function () { return vis.slice(); },
+      filtrar: function (fn) { externo = fn || null; aplica(); return api; },
+      semFiltroExterno: function () { return todas.filter(function (l) { return passa(l, true); }); },
       exportar: exporta,
       /** resolve quando as preferências guardadas já foram aplicadas */
       pronta: null

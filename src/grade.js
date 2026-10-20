@@ -17,9 +17,14 @@
      exportar: "titulos-receber",          // nome do arquivo; false esconde o botão
      vazio: "Nenhum título nesta situação.",
      tamPagina: 50,                        // 50 | 100 | 200; a pessoa troca e fica guardado
-     aoClicar: (linha) => {...}
+     aoClicar: (linha) => {...},
+     selecionavel: (linha) => linha.NOSSONUM ? "Já tem boleto" : true,   // não-true trava a caixinha; texto vira a dica
+     aoAtualizar: (g) => {...}             // depois de cada filtro/busca/carga (ex.: recontar cards de fora)
    });
    g.dados(linhas);   g.selecionadas();   g.visiveis();
+   g.filtrar((linha) => ...);   g.filtrar(null);   g.semFiltroExterno();   // filtro de fora (cards), soma com os da grade
+
+   Coluna com `html(v, linha)`: o HTML da célula (já escapado por quem monta); busca, filtro, ordem e Excel usam o texto.
 
    Tipos: texto (padrão) · codigo (nº de nota/título, sem separador) · num · moeda · pct · data · dataHora · situacao.  `formatar(v, linha)` sobrescreve a exibição. */
 (function (N) {
@@ -53,6 +58,7 @@
     }
   }
   function celula(c, v, linha) {
+    if (c.html) return c.html(v, linha);
     if (c.tipo === "situacao") {
       var s = (c.situacoes || {})[v];
       return '<span class="nui-sit nui-sit-' + (s && s.cor ? s.cor : "neutro") + '">' + esc(texto(c, v, linha)) + "</span>";
@@ -64,7 +70,8 @@
     var cols = o.colunas || [];
     var porCampo = {};
     cols.forEach(function (c) { porCampo[c.campo] = c; });
-    var todas = [], vis = [], sel = {}, busca = "", pagina = 1;
+    var todas = [], vis = [], sel = {}, busca = "", pagina = 1, externo = null;
+    function podeMarcar(l) { return !o.selecionavel || o.selecionavel(l) === true; }
     // o que a pessoa configura (e o que é guardado): filtros = { CAMPO: { de, ate, contem, valores } }
     var estado = {
       ocultas: cols.filter(function (c) { return c.oculta; }).map(function (c) { return c.campo; }),
@@ -143,17 +150,20 @@
       });
       var todos = thead.querySelector(".nui-g-todos");
       if (todos) {
-        var marcadas = vis.filter(function (l) { return sel[l[o.chave]]; }).length;
-        todos.checked = vis.length > 0 && marcadas === vis.length;
-        todos.indeterminate = marcadas > 0 && marcadas < vis.length;
+        var marcaveis = vis.filter(podeMarcar);
+        var marcadas = marcaveis.filter(function (l) { return sel[l[o.chave]]; }).length;
+        todos.checked = marcaveis.length > 0 && marcadas === marcaveis.length;
+        todos.indeterminate = marcadas > 0 && marcadas < marcaveis.length;
+        todos.disabled = !marcaveis.length;
         todos.onchange = function () {
-          vis.forEach(function (l) { if (todos.checked) sel[l[o.chave]] = l; else delete sel[l[o.chave]]; });
+          marcaveis.forEach(function (l) { if (todos.checked) sel[l[o.chave]] = l; else delete sel[l[o.chave]]; });
           desenha();
         };
       }
     }
 
-    function passa(l) {
+    function passa(l, semExterno) {
+      if (externo && !semExterno && !externo(l)) return false;
       if (busca) {
         var ok = vcols().some(function (c) { return norm(texto(c, l[c.campo], l)).indexOf(busca) >= 0; });
         if (!ok) return false;
@@ -178,7 +188,7 @@
     // manter = true só quando os dados são recarregados; filtro, busca e ordem voltam para a página 1
     function aplica(manter) {
       if (!manter) pagina = 1;
-      vis = todas.filter(passa);
+      vis = todas.filter(function (l) { return passa(l); });
       var ord = estado.ordem, c = ord && porCampo[ord.campo];
       if (c) {
         var m = ord.asc ? 1 : -1;
@@ -202,7 +212,11 @@
       mostra.forEach(function (l, idx) {
         var k = l[o.chave];
         h += '<tr data-idx="' + idx + '"' + (sel[k] ? ' class="nui-g-marcada"' : "") + ">";
-        if (o.selecao) h += '<td class="nui-g-ck"><input type="checkbox"' + (sel[k] ? " checked" : "") + "></td>";
+        if (o.selecao) {
+          var pode = o.selecionavel ? o.selecionavel(l) : true;
+          h += '<td class="nui-g-ck"><input type="checkbox"' + (sel[k] ? " checked" : "") +
+               (pode === true ? "" : " disabled" + (typeof pode === "string" ? ' title="' + esc(pode) + '"' : "")) + "></td>";
+        }
         vc.forEach(function (c) { h += '<td class="' + (ehNum(c) && c.tipo !== "codigo" ? "nui-dir" : "") + '">' + celula(c, l[c.campo], l) + "</td>"; });
         h += "</tr>";
       });
@@ -236,6 +250,7 @@
       } else tfoot.innerHTML = "";
 
       desenhaChips(); atualizaAcoes(); rodapeTexto();
+      if (o.aoAtualizar) o.aoAtualizar(api);
     }
 
     function rodapeTexto() {
@@ -484,7 +499,7 @@
       dados: function (linhas) {
         todas = linhas || [];
         var existe = {};
-        todas.forEach(function (l) { existe[l[o.chave]] = l; });
+        todas.forEach(function (l) { if (podeMarcar(l)) existe[l[o.chave]] = l; });
         Object.keys(sel).forEach(function (k) { if (existe[k]) sel[k] = existe[k]; else delete sel[k]; });
         aplica(true);
         return api;
@@ -492,6 +507,8 @@
       selecionadas: selecionadas,
       limparSelecao: function () { sel = {}; desenha(); },
       visiveis: function () { return vis.slice(); },
+      filtrar: function (fn) { externo = fn || null; aplica(); return api; },
+      semFiltroExterno: function () { return todas.filter(function (l) { return passa(l, true); }); },
       exportar: exporta,
       /** resolve quando as preferências guardadas já foram aplicadas */
       pronta: null
