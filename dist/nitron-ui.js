@@ -1,9 +1,9 @@
-/*! nitron-ui 1.3.0 — telas HTML5 do Sankhya da Nitron */
+/*! nitron-ui 1.4.0 — telas HTML5 do Sankhya da Nitron */
 (function () {
   if (window.Nitron && window.Nitron.versao) return;
-  window.Nitron = { versao: "1.3.0" };
+  window.Nitron = { versao: "1.4.0" };
   var s = document.createElement("style");
-  s.setAttribute("data-nitron-ui", "1.3.0");
+  s.setAttribute("data-nitron-ui", "1.4.0");
   s.textContent = ":root { --nui-fundo: #f4f6f9; --nui-painel: #ffffff; --nui-linha: #dde3ec; --nui-texto: #1c2733; --nui-suave: #5c6b7c; --nui-destaque: #0a6ea8; --nui-ok: #1e7d32; --nui-atencao: #b26a00; --nui-erro: #c62828; --nui-raio: 10px; --nui-fonte: 13px/1.45 \"Segoe UI\", system-ui, sans-serif; } .nui-fundo { position: fixed; inset: 0; z-index: 9000; background: rgba(28, 39, 51, .45); display: flex; align-items: center; justify-content: center; padding: 16px; animation: nui-aparece .12s ease-out; } .nui-modal { background: var(--nui-painel); color: var(--nui-texto); font: var(--nui-fonte); border-radius: var(--nui-raio); box-shadow: 0 12px 40px rgba(0, 0, 0, .25); width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; } .nui-p { max-width: 400px; } .nui-m { max-width: 560px; } .nui-g { max-width: 900px; } .nui-topo { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--nui-linha); } .nui-titulos { flex: 1; min-width: 0; } .nui-titulo { font-size: 15px; font-weight: 700; } .nui-descricao { color: var(--nui-suave); margin-top: 2px; } .nui-x { border: 0; background: none; font-size: 22px; line-height: 1; color: var(--nui-suave); cursor: pointer; padding: 0 4px; border-radius: 6px; } .nui-x:hover:not(:disabled) { background: var(--nui-fundo); color: var(--nui-texto); } .nui-corpo { padding: 16px 18px; overflow-y: auto; } .nui-msg { margin: 0; } .nui-erro { margin: 0 18px 12px; padding: 8px 10px; border-radius: 6px; background: #fdecea; color: var(--nui-erro); } .nui-rodape { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--nui-linha); background: #fafbfc; } .nui-bt { font: inherit; font-weight: 600; border-radius: 6px; padding: 7px 16px; cursor: pointer; border: 1px solid transparent; } .nui-bt:disabled { opacity: .55; cursor: not-allowed; } .nui-bt-primario { background: var(--nui-destaque); color: #fff; } .nui-bt-perigo { background: var(--nui-erro); color: #fff; } .nui-bt-secundario { background: #fff; color: var(--nui-texto); border-color: var(--nui-linha); } .nui-bt-secundario:hover:not(:disabled) { background: var(--nui-fundo); } .nui-girando::before, .nui-roda { content: \"\"; display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: nui-gira .7s linear infinite; vertical-align: -2px; margin-right: 6px; } .nui-avisos { position: fixed; right: 16px; bottom: 16px; z-index: 9100; display: flex; flex-direction: column; gap: 8px; max-width: 380px; font: var(--nui-fonte); } .nui-aviso { padding: 10px 14px; border-radius: 8px; color: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, .2); cursor: pointer; animation: nui-aparece .15s ease-out; } .nui-aviso-ok { background: var(--nui-ok); } .nui-aviso-erro { background: var(--nui-erro); } .nui-aviso-atencao { background: var(--nui-atencao); } .nui-carregando { position: absolute; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 4px; background: rgba(255, 255, 255, .75); color: var(--nui-suave); font: var(--nui-fonte); } .nui-carregando.nui-tela { position: fixed; z-index: 8900; } @keyframes nui-gira { to { transform: rotate(360deg); } } @keyframes nui-aparece { from { opacity: 0; } to { opacity: 1; } } .nui-grade { display: flex; flex-direction: column; min-height: 0; background: var(--nui-painel); border: 1px solid var(--nui-linha); border-radius: var(--nui-raio); font: var(--nui-fonte); color: var(--nui-texto); } .nui-g-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--nui-linha); } .nui-g-busca { font: inherit; padding: 6px 10px; border: 1px solid var(--nui-linha); border-radius: 6px; min-width: 200px; } .nui-g-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--nui-linha); background: #fafbfc; } .nui-g-acoes { margin-left: auto; } .nui-g-acoes { display: flex; gap: 6px; } .nui-chip { display: inline-flex; align-items: center; gap: 4px; background: #e3effa; color: #0a4f78; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12px; } .nui-chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 4px; border-radius: 50%; } .nui-chip button:hover { background: rgba(10, 110, 168, .15); } .nui-g-limpar { border: 0; background: none; color: var(--nui-destaque); cursor: pointer; font: inherit; font-size: 12px; text-decoration: underline; } .nui-g-rolagem { overflow: auto; flex: 1; min-height: 0; } .nui-grade table { width: 100%; border-collapse: separate; border-spacing: 0; } .nui-grade th { position: sticky; top: 0; z-index: 1; background: #eef2f7; text-align: left; font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--nui-linha); white-space: nowrap; cursor: pointer; user-select: none; } .nui-grade th:hover { background: #e3e9f1; } .nui-grade td { padding: 7px 10px; border-bottom: 1px solid #edf0f4; white-space: nowrap; } .nui-grade tbody tr:hover td { background: #f7f9fc; } .nui-grade tfoot td { position: sticky; bottom: 0; background: #f7f9fc; font-weight: 700; border-top: 1px solid var(--nui-linha); } .nui-grade .nui-dir { text-align: right; font-variant-numeric: tabular-nums; } .nui-g-ck { width: 32px; text-align: center; } .nui-g-marcada td { background: #e3effa !important; } .nui-g-clicavel { cursor: pointer; } .nui-g-vazio { text-align: center; color: var(--nui-suave); padding: 28px !important; white-space: normal !important; } .nui-g-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; color: var(--nui-suave); border-top: 1px solid var(--nui-linha); font-size: 12px; } .nui-g-pag { display: flex; align-items: center; gap: 4px; } .nui-g-pag label { margin-right: 8px; } .nui-g-pag select { font: inherit; padding: 2px 4px; border: 1px solid var(--nui-linha); border-radius: 4px; } .nui-g-ir { font: inherit; font-size: 14px; width: 28px; height: 26px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; color: var(--nui-texto); } .nui-g-ir:disabled { opacity: .4; cursor: default; } .nui-g-npag { padding: 0 6px; white-space: nowrap; } .nui-sit { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; } .nui-sit-ok { background: #e6f4ea; color: var(--nui-ok); } .nui-sit-atencao { background: #fff3e0; color: var(--nui-atencao); } .nui-sit-erro { background: #fdecea; color: var(--nui-erro); } .nui-sit-info { background: #e3effa; color: var(--nui-destaque); } .nui-sit-neutro { background: #eef2f7; color: var(--nui-suave); } .nui-filtros { display: flex; flex-direction: column; gap: 10px; } .nui-f-linha { display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: start; } .nui-f-nome { font-weight: 600; padding-top: 5px; } .nui-f-linha input[type=text], .nui-f-linha input[type=number], .nui-f-linha input[type=date], .nui-f-salvar input { font: inherit; padding: 5px 8px; border: 1px solid var(--nui-linha); border-radius: 6px; } .nui-f-linha input[type=number], .nui-f-linha input[type=date] { width: 150px; } .nui-f-linha input[type=text] { width: 100%; box-sizing: border-box; } .nui-f-op { display: inline-flex; align-items: center; gap: 4px; margin: 2px 12px 2px 0; cursor: pointer; } .nui-f-salvos { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--nui-linha); } .nui-f-lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .nui-chip-salvo { background: #eef2f7; color: var(--nui-texto); padding: 2px 4px 2px 2px; } .nui-chip-salvo .nui-f-usar { font: inherit; font-size: 12px; padding: 2px 8px; border-radius: 999px; } .nui-f-dica { color: var(--nui-suave); } .nui-f-salvar { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--nui-linha); } .nui-f-salvar input { flex: 1; } .nui-colunas { display: flex; flex-direction: column; margin-top: 8px; } .nui-col-linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 1px 4px; border-radius: 4px; } .nui-col-linha:hover { background: #f3f6fa; } .nui-col-mover button { font: inherit; width: 26px; height: 24px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; margin-left: 2px; } .nui-col-mover button:hover { border-color: var(--nui-destaque); color: var(--nui-destaque); } .nui-grade th.nui-g-arrastando { opacity: .45; } .nui-grade th.nui-g-alvo-esq { box-shadow: inset 3px 0 0 var(--nui-destaque); } .nui-grade th.nui-g-alvo-dir { box-shadow: inset -3px 0 0 var(--nui-destaque); }";
   (document.head || document.documentElement).appendChild(s);
 })();
@@ -376,9 +376,10 @@
 })(window.Nitron);
 
 /* Nitron.pref — preferências por tela (colunas, ordem, filtros, filtros salvos).
-   Hoje guarda no navegador (localStorage). Para acompanhar o usuário em qualquer máquina, troque o
-   armazenamento uma vez: Nitron.pref.usar({ ler: async (chave) => obj, gravar: async (chave, obj) => {} }).
-   Tudo assíncrono, para o armazenamento no Sankhya entrar sem mudar as telas. */
+   Padrão: no navegador (localStorage). Para acompanhar o usuário em qualquer máquina:
+     Nitron.pref.usarSankhya();   // antes de montar a grade; lê a view AD_VW_NITPREF e grava na AD_NITPREF
+   ou qualquer outro armazenamento: Nitron.pref.usar({ ler: async (chave) => obj, gravar: async (chave, obj) => {} }).
+   No Sankhya o navegador continua como cópia: se a tabela não existir ou a gravação falhar, a tela segue funcionando. */
 (function (N) {
   var PREFIXO = "nitron-ui:";
   var local = {
@@ -389,9 +390,87 @@
       try { window.localStorage.setItem(PREFIXO + chave, JSON.stringify(obj)); } catch (e) {}
     }
   };
+
+  /* Uma linha por usuário e chave. A view devolve as linhas do usuário logado e mais uma com ID vazio,
+     que dá o CODUSU para a primeira gravação. Sem preferência no Sankhya ainda, vale a do navegador
+     (quem já tinha arrumado a grade não perde nada) e a primeira gravação leva para o Sankhya. */
+  function sankhya(o) {
+    o = o || {};
+    var view = o.view || "AD_VW_NITPREF", entidade = o.entidade || "AD_NITPREF", espera = o.espera == null ? 1500 : o.espera;
+    var carga = null, codusu = null, linhas = {}, fora = false, avisado = false;
+    var pendente = {}, tempo = {}, fila = {};
+
+    function carrega() {
+      if (!carga) carga = N.sankhya.loadView(view, { campos: "CODUSU,ID,CHAVE,CONTEUDO", numericos: ["CODUSU", "ID"] })
+        .then(function (rs) {
+          rs.forEach(function (r) {
+            if (r.CODUSU != null) codusu = r.CODUSU;
+            if (r.ID != null && r.CHAVE) linhas[r.CHAVE] = { id: r.ID, conteudo: r.CONTEUDO };
+          });
+          if (codusu == null) throw new Error("usuário logado não identificado");
+        })
+        .catch(function (e) {
+          fora = true;
+          if (window.console) window.console.warn("nitron-ui: preferências só no navegador (" + (e && e.message ? e.message : e) + ")");
+        });
+      return carga;
+    }
+    function avisa(e) {
+      if (window.console) window.console.warn("nitron-ui: falha ao guardar preferência no Sankhya", e);
+      if (avisado) return;
+      avisado = true;
+      N.ui.avisar("Não consegui guardar suas preferências no Sankhya: valem só neste navegador por enquanto.", "atencao");
+    }
+    async function envia(chave) {
+      var obj = pendente[chave];
+      delete pendente[chave];
+      var txt = JSON.stringify(obj);
+      if (txt.length > 4000) { avisa(new Error("preferência com " + txt.length + " caracteres (máx. 4000): apague filtros salvos")); return; }
+      var l = linhas[chave];
+      if (l && l.conteudo === txt) return;
+      try {
+        if (l) await N.sankhya.salvar(entidade, { ID: l.id }, { CONTEUDO: txt, DHALTER: new Date() });
+        else {
+          var r = await N.sankhya.inserir(entidade, { CODUSU: codusu, CHAVE: chave, CONTEUDO: txt, DHALTER: new Date() }, { retornar: ["ID"] });
+          var id = r && r[0] ? Number(r[0].ID) : NaN;
+          // Sem o ID não dá para alterar depois: relê a view na próxima gravação
+          if (!id) { carga = null; return; }
+          l = linhas[chave] = { id: id };
+        }
+        l.conteudo = txt;
+      } catch (e) {
+        // Inclusão recusada (ex.: outra aba gravou a mesma chave antes): relê a view, a próxima gravação vira alteração
+        if (!l) carga = null;
+        avisa(e);
+      }
+    }
+
+    return {
+      ler: async function (chave) {
+        await carrega();
+        var l = !fora && linhas[chave];
+        if (!l) return local.ler(chave);
+        try { return JSON.parse(l.conteudo); } catch (e) { return local.ler(chave); }
+      },
+      /* Cópia no navegador na hora; no Sankhya só a última depois de `espera` ms parada
+         (arrastar coluna e marcar filtro geram várias gravações seguidas). Uma gravação por chave de cada vez. */
+      gravar: async function (chave, obj) {
+        await local.gravar(chave, obj);
+        await carrega();
+        if (fora) return;
+        pendente[chave] = obj;
+        clearTimeout(tempo[chave]);
+        tempo[chave] = setTimeout(function () {
+          fila[chave] = (fila[chave] || Promise.resolve()).then(function () { if (pendente[chave] !== undefined) return envia(chave); });
+        }, espera);
+      }
+    };
+  }
+
   var atual = local;
   N.pref = {
     usar: function (armazenamento) { atual = armazenamento || local; },
+    usarSankhya: function (opcoes) { atual = sankhya(opcoes); },
     ler: function (chave) { return atual.ler(chave).catch(function () { return null; }); },
     gravar: function (chave, obj) { return atual.gravar(chave, obj).catch(function () {}); }
   };

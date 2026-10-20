@@ -4,10 +4,10 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.3.0/dist/nitron-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.4.0/dist/nitron-ui.js"></script>
 ```
 
-Fixe a versão (`@1.3.0`). A tela sobe de versão depois de testada na HML.
+Fixe a versão (`@1.4.0`). A tela sobe de versão depois de testada na HML.
 
 ## Uso
 
@@ -70,8 +70,12 @@ contar os cards) e `aoAtualizar: (g) => ...` avisa a cada mudança. Célula com 
 Tipos de coluna: `texto` · `codigo` (nº de nota/título, sem separador de milhar) · `num` · `moeda` · `pct` ·
 `data` · `dataHora` · `situacao`. `formatar(v, linha)` sobrescreve a exibição.
 
-**Onde ficam as preferências:** no navegador (por computador). Para acompanhar a pessoa em qualquer máquina,
-troque o armazenamento uma vez na tela: `Nitron.pref.usar({ ler: async (chave) => ..., gravar: async (chave, obj) => ... })`.
+**Onde ficam as preferências:** por padrão, no navegador (por computador). Para acompanhar a pessoa em qualquer
+máquina, chame `Nitron.pref.usarSankhya()` antes de montar a grade: lê a view `AD_VW_NITPREF` (só as linhas do usuário
+logado) e grava na tabela `AD_NITPREF` (usuário, chave, conteúdo JSON até 4000) pelo save nativo, uma gravação por chave
+depois de 1,5 s parada. O navegador continua como cópia: sem a tabela, a tela segue só no navegador; gravação que falha
+avisa uma vez. Quem ainda não tem nada no Sankhya começa com o que já tinha no navegador. Outro armazenamento:
+`Nitron.pref.usar({ ler: async (chave) => ..., gravar: async (chave, obj) => ... })`.
 
 | Função | Serviço do Sankhya |
 |---|---|
@@ -95,5 +99,5 @@ Configuração opcional: `S.configurar({ lote: 30, tamParam: 0, mgeSession: fals
 
 ## Desenvolver
 
-`src/` → `node build.mjs` → `dist/nitron-ui.js`. Testes: `node teste/format.test.mjs` e `demo/index.html`
+`src/` → `node build.mjs` → `dist/nitron-ui.js`. Testes: `node teste/format.test.mjs`, `node teste/pref.test.mjs` e `demo/index.html`
 (Sankhya simulado). Nova versão: mudar `version` no `package.json`, build, commit e tag `vX.Y.Z`.
