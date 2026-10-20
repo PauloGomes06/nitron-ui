@@ -4,10 +4,21 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.4.0/dist/nitron-ui.js"></script>
+<script>(function () {
+  var v = "1";   // sempre a última 1.x; para testar outra antes: localStorage "nitron-ui:versao" = "1.5.0" ou hash do commit
+  try { v = window.localStorage.getItem("nitron-ui:versao") || v; } catch (e) {}
+  document.write('<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@' + v + '/dist/nitron-ui.js?d=' +
+    new Date().toISOString().slice(0, 10) + '"></script>');
+})();</script>
 ```
 
-Fixe a versão (`@1.4.0`). A tela sobe de versão depois de testada na HML.
+As telas apontam para `@1`: toda versão 1.x nova chega sozinha, sem mexer em dash nenhum (o `?d=` renova o cache do
+navegador uma vez por dia). Por isso, **na 1.x só entra mudança compatível**: função nova, opção nova com padrão igual
+ao comportamento de antes, correção. Mudou o jeito de chamar algo que já existe? É 2.0, e cada tela sobe quando for testada.
+
+**Publicar:** mudar `version` no `package.json` → `node build.mjs` → testes → commit → tag `vX.Y.Z` → push do main e da tag →
+`curl https://purge.jsdelivr.net/gh/PauloGomes06/nitron-ui@1/dist/nitron-ui.js` (sem isso o CDN segura a anterior por até 12 h).
+Antes da tag, dá para testar na HML pelo hash do commit (localStorage acima).
 
 ## Uso
 
@@ -100,4 +111,4 @@ Configuração opcional: `S.configurar({ lote: 30, tamParam: 0, mgeSession: fals
 ## Desenvolver
 
 `src/` → `node build.mjs` → `dist/nitron-ui.js`. Testes: `node teste/format.test.mjs`, `node teste/pref.test.mjs` e `demo/index.html`
-(Sankhya simulado). Nova versão: mudar `version` no `package.json`, build, commit e tag `vX.Y.Z`.
+(Sankhya simulado). Nova versão: ver **Publicar** no topo.
