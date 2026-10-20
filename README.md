@@ -4,20 +4,19 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script>(function () {
-  var v = "1";   // sempre a última 1.x; para testar outra antes: localStorage "nitron-ui:versao" = "1.5.0" ou hash do commit
-  try { v = window.localStorage.getItem("nitron-ui:versao") || v; } catch (e) {}
-  document.write('<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@' + v + '/dist/nitron-ui.js?d=' +
-    new Date().toISOString().slice(0, 10) + '"></script>');
-})();</script>
+<script>document.write('<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@main/carregar.js?tela=MINHA-TELA&d=' +
+  new Date().toISOString().slice(0, 10) + '"></script>');</script>
 ```
 
-As telas apontam para `@1`: toda versão 1.x nova chega sozinha, sem mexer em dash nenhum (o `?d=` renova o cache do
-navegador uma vez por dia). Por isso, **na 1.x só entra mudança compatível**: função nova, opção nova com padrão igual
-ao comportamento de antes, correção. Mudou o jeito de chamar algo que já existe? É 2.0, e cada tela sobe quando for testada.
+O dash **nunca diz a versão**: carrega o [`carregar.js`](carregar.js) com o nome da tela, e é lá que se decide o que cada
+tela recebe (`PADRAO` = "1", a última 1.x; `TELAS` = exceções). Melhoria na 1.x chega em todos os dashes sozinha (o
+`?d=` renova o cache do navegador uma vez por dia). Por isso **na 1.x só entra mudança compatível**. Se um dia vier
+uma 2.0, muda o `PADRAO` ou põe as telas uma a uma em `TELAS`, sem republicar dash nenhum.
+Testar outra versão num navegador só: localStorage `"nitron-ui:versao"` = `"1.5.0"` ou hash de commit.
 
 **Publicar:** mudar `version` no `package.json` → `node build.mjs` → testes → commit → tag `vX.Y.Z` → push do main e da tag →
 `curl https://purge.jsdelivr.net/gh/PauloGomes06/nitron-ui@1/dist/nitron-ui.js` (sem isso o CDN segura a anterior por até 12 h).
+Mexeu no `carregar.js`: push no main e `curl https://purge.jsdelivr.net/gh/PauloGomes06/nitron-ui@main/carregar.js`.
 Antes da tag, dá para testar na HML pelo hash do commit (localStorage acima).
 
 ## Uso
