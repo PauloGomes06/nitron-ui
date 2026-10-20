@@ -1,5 +1,6 @@
 /* Nitron.ui.grade — tabela de dados padrão: busca, filtros (em modal), filtros salvos, colunas, ordenação,
-   total, seleção e exportação .xlsx. Com `id`, guarda o que cada pessoa configurou (Nitron.pref).
+   total, seleção e exportação .xlsx. Com `id`, guarda o que cada pessoa configurou (Nitron.pref),
+   inclusive a ORDEM das colunas (arrastar o cabeçalho, ou as setas em Colunas).
 
    var g = Nitron.ui.grade(document.querySelector("#lista"), {
      id: "titulos-receber",                // chave das preferências; sem id, nada é guardado
@@ -76,6 +77,7 @@
     var estado = {
       ocultas: cols.filter(function (c) { return c.oculta; }).map(function (c) { return c.campo; }),
       ordem: null,
+      posicao: null,            // ordem das colunas escolhida pela pessoa (lista de campos); null = a da tela
       tamPagina: TAMANHOS.indexOf(o.tamPagina) >= 0 ? o.tamPagina : 50,
       filtros: {},
       salvos: []
@@ -87,7 +89,20 @@
       clearTimeout(tGrava);
       tGrava = setTimeout(function () { N.pref.gravar(chavePref, estado); }, 300);
     }
-    function vcols() { return cols.filter(function (c) { return estado.ocultas.indexOf(c.campo) < 0; }); }
+    // colunas na ordem da pessoa; campo novo na tela (fora da ordem guardada) entra no fim
+    function ordenadas() {
+      if (!estado.posicao) return cols.slice();
+      var lista = estado.posicao.filter(function (k) { return porCampo[k]; }).map(function (k) { return porCampo[k]; });
+      return lista.concat(cols.filter(function (c) { return lista.indexOf(c) < 0; }));
+    }
+    function vcols() { return ordenadas().filter(function (c) { return estado.ocultas.indexOf(c.campo) < 0; }); }
+    function moveColuna(campo, alvo, depois) {
+      var ordem = ordenadas().map(function (c) { return c.campo; });
+      ordem.splice(ordem.indexOf(campo), 1);
+      ordem.splice(ordem.indexOf(alvo) + (depois ? 1 : 0), 0, campo);
+      estado.posicao = ordem;
+      guarda(); desenha();
+    }
 
     alvo.classList.add("nui-grade");
     alvo.innerHTML =
@@ -137,7 +152,7 @@
       vcols().forEach(function (c) {
         var seta = estado.ordem && estado.ordem.campo === c.campo ? (estado.ordem.asc ? " ▲" : " ▼") : "";
         h += '<th data-campo="' + esc(c.campo) + '" class="' + (ehNum(c) && c.tipo !== "codigo" ? "nui-dir" : "") + '"' + (c.largura ? ' style="min-width:' + c.largura + 'px"' : "") +
-             ' title="Clique para ordenar">' + esc(c.titulo || c.campo) + seta + "</th>";
+             ' draggable="true" title="Clique para ordenar · arraste para mudar a coluna de lugar">' + esc(c.titulo || c.campo) + seta + "</th>";
       });
       thead.innerHTML = h + "</tr>";
       thead.querySelectorAll("th[data-campo]").forEach(function (th) {
@@ -146,6 +161,25 @@
           estado.ordem = ord && ord.campo === k ? (ord.asc ? { campo: k, asc: false } : null) : { campo: k, asc: true };
           guarda();
           aplica();
+        };
+        th.ondragstart = function (e) {
+          e.dataTransfer.setData("text/plain", th.dataset.campo);
+          e.dataTransfer.effectAllowed = "move";
+          th.classList.add("nui-g-arrastando");
+        };
+        th.ondragend = function () { th.classList.remove("nui-g-arrastando"); };
+        th.ondragover = function (e) {
+          e.preventDefault();
+          var r = th.getBoundingClientRect(), dir = e.clientX > r.left + r.width / 2;
+          th.classList.toggle("nui-g-alvo-dir", dir);
+          th.classList.toggle("nui-g-alvo-esq", !dir);
+        };
+        th.ondragleave = function () { th.classList.remove("nui-g-alvo-dir", "nui-g-alvo-esq"); };
+        th.ondrop = function (e) {
+          e.preventDefault();
+          var de = e.dataTransfer.getData("text/plain"), depois = th.classList.contains("nui-g-alvo-dir");
+          th.classList.remove("nui-g-alvo-dir", "nui-g-alvo-esq");
+          if (de && de !== th.dataset.campo && porCampo[de]) moveColuna(de, th.dataset.campo, depois);
         };
       });
       var todos = thead.querySelector(".nui-g-todos");
@@ -380,26 +414,36 @@
     }
 
     function abreColunas() {
-      var html = '<div class="nui-f-dica">Escolha o que aparece na grade e na exportação.</div><div class="nui-colunas">' +
-        cols.map(function (c) {
-          return '<label class="nui-f-op"><input type="checkbox" value="' + esc(c.campo) + '"' + (estado.ocultas.indexOf(c.campo) < 0 ? " checked" : "") + "> " + esc(c.titulo || c.campo) + "</label>";
+      var html = '<div class="nui-f-dica">Escolha o que aparece e a ordem (setas, ou arraste o cabeçalho na grade). Vale também para a exportação.</div><div class="nui-colunas">' +
+        ordenadas().map(function (c) {
+          return '<div class="nui-col-linha"><label class="nui-f-op"><input type="checkbox" value="' + esc(c.campo) + '"' + (estado.ocultas.indexOf(c.campo) < 0 ? " checked" : "") + "> " + esc(c.titulo || c.campo) + "</label>" +
+            '<span class="nui-col-mover"><button type="button" data-mover="-1" title="Subir">↑</button><button type="button" data-mover="1" title="Descer">↓</button></span></div>';
         }).join("") + "</div>";
-      N.ui.modal({
+      var mc = N.ui.modal({
         titulo: "Colunas",
         conteudo: html,
         tamanho: "p",
         botoes: [
           { texto: "Padrão", tipo: "secundario", acao: function () {
               estado.ocultas = cols.filter(function (c) { return c.oculta; }).map(function (c) { return c.campo; });
+              estado.posicao = null;
               guarda(); aplica();
           } },
           { texto: "Aplicar", tipo: "primario", acao: function (mm) {
               var marcadas = [].map.call(mm.corpo.querySelectorAll("input:checked"), function (k) { return k.value; });
               if (!marcadas.length) throw new Error("Deixe pelo menos uma coluna.");
               estado.ocultas = cols.filter(function (c) { return marcadas.indexOf(c.campo) < 0; }).map(function (c) { return c.campo; });
+              estado.posicao = [].map.call(mm.corpo.querySelectorAll(".nui-col-linha input"), function (k) { return k.value; });
               guarda(); aplica();
           } }
         ]
+      });
+      mc.corpo.querySelectorAll("button[data-mover]").forEach(function (b) {
+        b.onclick = function () {
+          var linha = b.closest(".nui-col-linha"), pai = linha.parentNode;
+          if (b.dataset.mover === "-1") { if (linha.previousElementSibling) pai.insertBefore(linha, linha.previousElementSibling); }
+          else if (linha.nextElementSibling) pai.insertBefore(linha.nextElementSibling, linha);
+        };
       });
     }
 
@@ -518,6 +562,7 @@
       if (!p) return api;
       if (Array.isArray(p.ocultas)) estado.ocultas = p.ocultas.filter(function (k) { return porCampo[k]; });
       if (p.ordem && porCampo[p.ordem.campo]) estado.ordem = p.ordem;
+      if (Array.isArray(p.posicao)) estado.posicao = p.posicao;
       if (p.filtros) estado.filtros = p.filtros;
       if (Array.isArray(p.salvos)) estado.salvos = p.salvos;
       if (TAMANHOS.indexOf(p.tamPagina) >= 0) estado.tamPagina = p.tamPagina;

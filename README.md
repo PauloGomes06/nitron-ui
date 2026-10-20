@@ -4,10 +4,10 @@ Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avi
 Um arquivo, sem dependências, com o CSS embutido.
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.2.0/dist/nitron-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/PauloGomes06/nitron-ui@1.3.0/dist/nitron-ui.js"></script>
 ```
 
-Fixe a versão (`@1.2.0`). A tela sobe de versão depois de testada na HML.
+Fixe a versão (`@1.3.0`). A tela sobe de versão depois de testada na HML.
 
 ## Uso
 
@@ -57,7 +57,7 @@ g.dados(await S.loadView("AD_VW_MINHA_VIEW", { campos: "NUFIN,NUMNOTA,NOMEPARC,D
 ```
 
 Vem pronto: busca (sem acento), **Filtros** em modal montado pelas colunas (contém, de/até, marcar valores),
-**filtros salvos com nome**, escolha de **Colunas**, ordenação no cabeçalho, total no rodapé sobre o filtrado,
+**filtros salvos com nome**, escolha e **ordem das Colunas** (arrastar o cabeçalho ou setas no modal), ordenação no cabeçalho, total no rodapé sobre o filtrado,
 **paginação** (50/100/200 por página, guardado por pessoa; total e Excel sempre sobre tudo), seleção em massa com ações, e **Exportar Excel** (.xlsx com número, data e R$ de verdade, do que está na tela;
 o gerador só é baixado no clique, e se falhar sai CSV).
 

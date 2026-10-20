@@ -77,3 +77,10 @@
 .nui-f-salvar { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--nui-linha); }
 .nui-f-salvar input { flex: 1; }
 .nui-colunas { display: flex; flex-direction: column; margin-top: 8px; }
+.nui-col-linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 1px 4px; border-radius: 4px; }
+.nui-col-linha:hover { background: #f3f6fa; }
+.nui-col-mover button { font: inherit; width: 26px; height: 24px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; margin-left: 2px; }
+.nui-col-mover button:hover { border-color: var(--nui-destaque); color: var(--nui-destaque); }
+.nui-grade th.nui-g-arrastando { opacity: .45; }
+.nui-grade th.nui-g-alvo-esq { box-shadow: inset 3px 0 0 var(--nui-destaque); }
+.nui-grade th.nui-g-alvo-dir { box-shadow: inset -3px 0 0 var(--nui-destaque); }
