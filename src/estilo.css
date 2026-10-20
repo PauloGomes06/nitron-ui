@@ -63,7 +63,7 @@
 .nui-sit-ok { background: #e6f4ea; color: var(--nui-ok); } .nui-sit-atencao { background: #fff3e0; color: var(--nui-atencao); }
 .nui-sit-erro { background: #fdecea; color: var(--nui-erro); } .nui-sit-info { background: #e3effa; color: var(--nui-destaque); } .nui-sit-neutro { background: #eef2f7; color: var(--nui-suave); }
 .nui-filtros { display: flex; flex-direction: column; gap: 10px; }
-.nui-f-linha { display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: start; }
+.nui-f-linha { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 8px; align-items: start; }
 .nui-f-nome { font-weight: 600; padding-top: 5px; }
 .nui-f-linha input[type=text], .nui-f-linha input[type=number], .nui-f-linha input[type=date], .nui-f-salvar input { font: inherit; padding: 5px 8px; border: 1px solid var(--nui-linha); border-radius: 6px; }
 .nui-f-linha input[type=number], .nui-f-linha input[type=date] { width: 150px; }
