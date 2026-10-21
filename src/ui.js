@@ -20,6 +20,10 @@
   }
 
   var abertos = [];
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" || !abertos.length) return;
+    abertos[abertos.length - 1].fecharPorEsc();
+  });
 
   /** Modal único das telas.
       Nitron.ui.modal({
@@ -79,10 +83,11 @@
         abertos.splice(abertos.indexOf(api), 1);
         if (o.aoFechar) o.aoFechar();
       },
+      fecharPorEsc: function () { if (!bloqueado) api.fechar(); }
     };
 
     x.onclick = function () { if (!bloqueado) api.fechar(); };
-    /* Fecha so pelo X e pelos botoes: clique fora e Esc nao fecham (quem digitava perdia o que digitou). */
+    /* Clique fora nao fecha (quem digitava perdia o que digitou): fecha no X, nos botoes e no Esc. */
 
     botoes.forEach(function (b) {
       b.el.onclick = async function () {
