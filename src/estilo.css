@@ -96,3 +96,5 @@
 /* engrenagem do componente de BI (esconderMoldura): discreta no canto; o hover so acende, nao troca a cor */
 .nui-bi{position:fixed;top:4px;right:4px;z-index:2147483000;width:24px;height:24px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid #d5dde6;border-radius:6px;background:#fff;color:#7a8794;opacity:.55;cursor:pointer}
 .nui-bi:hover{opacity:1}
+/* trecho achado pela busca da grade */
+.nui-grade mark.nui-g-achado { background: #ffe58a; color: inherit; padding: 0; border-radius: 2px; }

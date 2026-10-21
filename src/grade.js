@@ -37,6 +37,38 @@
   function norm(s) {
     return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   }
+  /* Marca na celula o trecho que a busca achou, sem acento e sem maiuscula como a propria busca.
+     Anda pelos nos de texto: vale tambem para coluna com html(), sem mexer no HTML de quem montou. */
+  function destaca(raiz, termo) {
+    if (!termo) return;
+    var nos = [], w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT, null), n;
+    while ((n = w.nextNode())) if (n.nodeValue.trim()) nos.push(n);
+    nos.forEach(function (no) {
+      var orig = no.nodeValue, chato = "", mapa = [];
+      for (var i = 0; i < orig.length; i++) {
+        var c = norm(orig[i]);
+        for (var j = 0; j < c.length; j++) { chato += c[j]; mapa.push(i); }
+      }
+      var partes = [], ult = 0, p = chato.indexOf(termo);
+      while (p >= 0) {
+        var ini = mapa[p], fim = mapa[p + termo.length - 1] + 1;
+        if (ini >= ult) { partes.push([ini, fim]); ult = fim; }
+        p = chato.indexOf(termo, p + termo.length);
+      }
+      if (!partes.length) return;
+      var frag = document.createDocumentFragment(), pos = 0;
+      partes.forEach(function (pt) {
+        if (pt[0] > pos) frag.appendChild(document.createTextNode(orig.slice(pos, pt[0])));
+        var m = document.createElement("mark");
+        m.className = "nui-g-achado";
+        m.textContent = orig.slice(pt[0], pt[1]);
+        frag.appendChild(m);
+        pos = pt[1];
+      });
+      if (pos < orig.length) frag.appendChild(document.createTextNode(orig.slice(pos)));
+      no.parentNode.replaceChild(frag, no);
+    });
+  }
   function numero(v) {
     if (v == null || v === "") return null;
     var n = typeof v === "number" ? v : Number(String(v).replace(",", "."));
@@ -277,6 +309,7 @@
         h = '<tr><td class="nui-g-vazio" colspan="' + (vc.length + (o.selecao ? 1 : 0)) + '">' + esc(msg) + "</td></tr>";
       }
       tbody.innerHTML = h;
+      if (busca) tbody.querySelectorAll("tr[data-idx] td:not(.nui-g-ck)").forEach(function (td) { destaca(td, busca); });
       tbody.querySelectorAll("tr[data-idx]").forEach(function (tr) {
         var l = mostra[Number(tr.dataset.idx)];
         var ck = tr.querySelector("input[type=checkbox]");
