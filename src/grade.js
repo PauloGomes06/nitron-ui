@@ -88,7 +88,8 @@
       posicao: null,            // ordem das colunas escolhida pela pessoa (lista de campos); null = a da tela
       tamPagina: TAMANHOS.indexOf(o.tamPagina) >= 0 ? o.tamPagina : 50,
       filtros: {},
-      salvos: []
+      salvos: [],
+      totais: null              // colunas somadas no rodapé escolhidas pela pessoa; null = as da tela (total: true)
     };
     var chavePref = o.id ? "grade:" + o.id : null;
     var tGrava;
@@ -103,6 +104,9 @@
       var lista = estado.posicao.filter(function (k) { return porCampo[k]; }).map(function (k) { return porCampo[k]; });
       return lista.concat(cols.filter(function (c) { return lista.indexOf(c) < 0; }));
     }
+    // Só dinheiro e quantidade somam (código e % não fazem sentido somados).
+    function totalizavel(c) { return c.tipo === "moeda" || c.tipo === "num"; }
+    function totaliza(c) { return totalizavel(c) && (estado.totais ? estado.totais.indexOf(c.campo) >= 0 : !!c.total); }
     function vcols() { return ordenadas().filter(function (c) { return estado.ocultas.indexOf(c.campo) < 0; }); }
     function moveColuna(campo, alvo, depois) {
       var ordem = ordenadas().map(function (c) { return c.campo; });
@@ -279,11 +283,11 @@
         if (o.aoClicar) { tr.classList.add("nui-g-clicavel"); tr.onclick = function () { o.aoClicar(l); }; }
       });
 
-      var temTotal = vc.some(function (c) { return c.total; });
+      var temTotal = vc.some(totaliza);
       if (temTotal && vis.length) {
         var f = "<tr>" + (o.selecao ? "<td></td>" : "");
         vc.forEach(function (c, i) {
-          if (c.total) {
+          if (totaliza(c)) {
             var s = vis.reduce(function (a, l) { return a + (numero(l[c.campo]) || 0); }, 0);
             f += '<td class="nui-dir">' + esc(texto(c, s, {})) + "</td>";
           } else f += i === 0 ? "<td>Total</td>" : "<td></td>";
@@ -426,9 +430,10 @@
     }
 
     function abreColunas() {
-      var html = '<div class="nui-f-dica">Escolha o que aparece e a ordem (setas, ou arraste o cabeçalho na grade). Vale também para a exportação.</div><div class="nui-colunas">' +
+      var html = '<div class="nui-f-dica">Escolha o que aparece e a ordem (setas, ou arraste o cabeçalho na grade). Vale também para a exportação. Em colunas de valor, "Somar" mostra o total no rodapé.</div><div class="nui-colunas">' +
         ordenadas().map(function (c) {
-          return '<div class="nui-col-linha"><label class="nui-f-op"><input type="checkbox" value="' + esc(c.campo) + '"' + (estado.ocultas.indexOf(c.campo) < 0 ? " checked" : "") + "> " + esc(c.titulo || c.campo) + "</label>" +
+          return '<div class="nui-col-linha"><label class="nui-f-op"><input type="checkbox" class="nui-col-ver" value="' + esc(c.campo) + '"' + (estado.ocultas.indexOf(c.campo) < 0 ? " checked" : "") + "> " + esc(c.titulo || c.campo) + "</label>" +
+            (totalizavel(c) ? '<label class="nui-col-somar" title="Somar no rodapé"><input type="checkbox" class="nui-col-tot" value="' + esc(c.campo) + '"' + (totaliza(c) ? " checked" : "") + "> Somar</label>" : "") +
             '<span class="nui-col-mover"><button type="button" data-mover="-1" title="Subir">↑</button><button type="button" data-mover="1" title="Descer">↓</button></span></div>';
         }).join("") + "</div>";
       var mc = N.ui.modal({
@@ -439,13 +444,15 @@
           { texto: "Padrão", tipo: "secundario", acao: function () {
               estado.ocultas = cols.filter(function (c) { return c.oculta; }).map(function (c) { return c.campo; });
               estado.posicao = null;
+              estado.totais = null;
               guarda(); aplica();
           } },
           { texto: "Aplicar", tipo: "primario", acao: function (mm) {
-              var marcadas = [].map.call(mm.corpo.querySelectorAll("input:checked"), function (k) { return k.value; });
+              var marcadas = [].map.call(mm.corpo.querySelectorAll("input.nui-col-ver:checked"), function (k) { return k.value; });
               if (!marcadas.length) throw new Error("Deixe pelo menos uma coluna.");
               estado.ocultas = cols.filter(function (c) { return marcadas.indexOf(c.campo) < 0; }).map(function (c) { return c.campo; });
-              estado.posicao = [].map.call(mm.corpo.querySelectorAll(".nui-col-linha input"), function (k) { return k.value; });
+              estado.posicao = [].map.call(mm.corpo.querySelectorAll("input.nui-col-ver"), function (k) { return k.value; });
+              estado.totais = [].map.call(mm.corpo.querySelectorAll("input.nui-col-tot:checked"), function (k) { return k.value; });
               guarda(); aplica();
           } }
         ]
@@ -577,6 +584,7 @@
       if (Array.isArray(p.posicao)) estado.posicao = p.posicao;
       if (p.filtros) estado.filtros = p.filtros;
       if (Array.isArray(p.salvos)) estado.salvos = p.salvos;
+      if (Array.isArray(p.totais)) estado.totais = p.totais.filter(function (k) { return porCampo[k]; });
       if (TAMANHOS.indexOf(p.tamPagina) >= 0) estado.tamPagina = p.tamPagina;
       aplica();
       return api;

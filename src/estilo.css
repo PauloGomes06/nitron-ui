@@ -81,6 +81,7 @@
 .nui-colunas { display: flex; flex-direction: column; margin-top: 8px; }
 .nui-col-linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 1px 4px; border-radius: 4px; }
 .nui-col-linha:hover { background: #f3f6fa; }
+.nui-col-somar { margin-left: auto; font-size: 12px; color: var(--nui-suave); white-space: nowrap; cursor: pointer; }
 .nui-col-mover button { font: inherit; width: 26px; height: 24px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; margin-left: 2px; }
 .nui-col-mover button:hover { border-color: var(--nui-destaque); color: var(--nui-destaque); }
 .nui-grade th.nui-g-arrastando { opacity: .45; }
