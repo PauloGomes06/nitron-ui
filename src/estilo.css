@@ -51,6 +51,11 @@
 .nui-g-ck { width: 32px; text-align: center; }
 .nui-g-marcada td { background: #e3effa !important; }
 .nui-g-clicavel { cursor: pointer; }
+.nui-g-aberta td { background: #eef4fa; font-weight: 600; }
+.nui-grade tr.nui-g-detalhe td { white-space: normal; background: #fbfcfe; padding: 10px 14px 14px; border-bottom: 2px solid var(--nui-linha); }
+.nui-grade tbody tr.nui-g-detalhe:hover td { background: #fbfcfe; }
+.nui-g-esperando { color: var(--nui-suave); }
+.nui-g-erro { color: var(--nui-erro); }
 .nui-g-vazio { text-align: center; color: var(--nui-suave); padding: 28px !important; white-space: normal !important; }
 .nui-g-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; color: var(--nui-suave); border-top: 1px solid var(--nui-linha); font-size: 12px; }
 .nui-g-pag { display: flex; align-items: center; gap: 4px; }

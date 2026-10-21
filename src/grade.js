@@ -19,6 +19,7 @@
      vazio: "Nenhum título nesta situação.",
      tamPagina: 50,                        // 50 | 100 | 200; a pessoa troca e fica guardado
      aoClicar: (linha) => {...},
+     expandir: async (linha) => "<html>",  // drill-down: clicar abre o detalhe logo abaixo da linha, clicar de novo fecha (no lugar de aoClicar)
      selecionavel: (linha) => linha.NOSSONUM ? "Já tem boleto" : true,   // não-true trava a caixinha; texto vira a dica
      aoAtualizar: (g) => {...}             // depois de cada filtro/busca/carga (ex.: recontar cards de fora)
    });
@@ -93,6 +94,7 @@
     };
     var chavePref = o.id ? "grade:" + o.id : null;
     var tGrava;
+    var abertos = {};           // linhas expandidas (o.expandir): chave -> HTML do detalhe; null enquanto carrega
     function guarda() {
       if (!chavePref) return;
       clearTimeout(tGrava);
@@ -265,6 +267,10 @@
         }
         vc.forEach(function (c) { h += '<td class="' + (ehNum(c) && c.tipo !== "codigo" ? "nui-dir" : "") + '">' + celula(c, l[c.campo], l) + "</td>"; });
         h += "</tr>";
+        if (o.expandir && k in abertos) {
+          h += '<tr class="nui-g-detalhe"><td colspan="' + (vc.length + (o.selecao ? 1 : 0)) + '">' +
+               (abertos[k] == null ? '<div class="nui-g-esperando">Carregando…</div>' : abertos[k]) + "</td></tr>";
+        }
       });
       if (!mostra.length) {
         var msg = todas.length ? "Nenhuma linha com esses filtros." : (o.vazio || "Nada para mostrar.");
@@ -280,7 +286,11 @@
           tr.classList.toggle("nui-g-marcada", ck.checked);
           montaCabecalho(); atualizaAcoes(); rodapeTexto();
         };
-        if (o.aoClicar) { tr.classList.add("nui-g-clicavel"); tr.onclick = function () { o.aoClicar(l); }; }
+        if (o.expandir) {
+          tr.classList.add("nui-g-clicavel");
+          if (l[o.chave] in abertos) tr.classList.add("nui-g-aberta");
+          tr.onclick = function (e) { if (!e.target.closest("a, button, input, select")) alterna(l); };
+        } else if (o.aoClicar) { tr.classList.add("nui-g-clicavel"); tr.onclick = function () { o.aoClicar(l); }; }
       });
 
       var temTotal = vc.some(totaliza);
@@ -297,6 +307,16 @@
 
       desenhaChips(); atualizaAcoes(); rodapeTexto();
       if (o.aoAtualizar) o.aoAtualizar(api);
+    }
+
+    async function alterna(l) {
+      var k = l[o.chave];
+      if (k in abertos) { delete abertos[k]; desenha(); return; }
+      abertos[k] = null; desenha();
+      var html;
+      try { html = await o.expandir(l); html = html == null ? "" : String(html); }
+      catch (e) { html = '<div class="nui-g-erro">' + esc(e && e.message || e) + "</div>"; }
+      if (k in abertos) { abertos[k] = html; desenha(); }
     }
 
     function rodapeTexto() {
@@ -430,7 +450,7 @@
     }
 
     function abreColunas() {
-      var html = '<div class="nui-f-dica">Escolha o que aparece e a ordem (setas, ou arraste o cabeçalho na grade). Vale também para a exportação. Em colunas de valor, "Somar" mostra o total no rodapé.</div><div class="nui-colunas">' +
+      var html = '<div class="nui-f-dica">Escolha o que aparece e a ordem (setas, ou arraste o cabeçalho na grade). Vale também para a exportação. Em colunas de valor, "Somar" mostra o total no rodapé e no Excel.</div><div class="nui-colunas">' +
         ordenadas().map(function (c) {
           return '<div class="nui-col-linha"><label class="nui-f-op"><input type="checkbox" class="nui-col-ver" value="' + esc(c.campo) + '"' + (estado.ocultas.indexOf(c.campo) < 0 ? " checked" : "") + "> " + esc(c.titulo || c.campo) + "</label>" +
             (totalizavel(c) ? '<label class="nui-col-somar" title="Somar no rodapé"><input type="checkbox" class="nui-col-tot" value="' + esc(c.campo) + '"' + (totaliza(c) ? " checked" : "") + "> Somar</label>" : "") +
@@ -492,6 +512,11 @@
       var t = texto(c, v, l);
       return t === F.VAZIO ? "" : t;
     }
+    function somaVisiveis(c) { return Math.round(vis.reduce(function (a, l) { return a + (numero(l[c.campo]) || 0); }, 0) * 1e6) / 1e6; }
+    function formatoExcel(c) {
+      return c.tipo === "codigo" ? "0" : c.tipo === "moeda" ? '"R$" #,##0.00' : c.tipo === "pct" ? "0.0%" : c.tipo === "num" ? (c.casas ? "#,##0." + "0".repeat(c.casas) : "#,##0") :
+             c.tipo === "data" ? "dd/mm/yyyy" : c.tipo === "dataHora" ? "dd/mm/yyyy hh:mm" : null;
+    }
     function exportaCsv(vc) {
       var linhas = [vc.map(function (c) { return c.titulo || c.campo; })].concat(vis.map(function (l) {
         return vc.map(function (c) {
@@ -499,6 +524,10 @@
           var t = texto(c, l[c.campo], l);
           return t === F.VAZIO ? "" : t;
         });
+      }));
+      if (vis.length && vc.some(totaliza)) linhas.push(vc.map(function (c, i) {
+        if (!totaliza(c)) return i === 0 ? "Total" : "";
+        return String(somaVisiveis(c)).replace(".", ",");
       }));
       var csv = "﻿" + linhas.map(function (r) { return r.map(function (x) { return /[";\n]/.test(x) ? '"' + String(x).replace(/"/g, '""') + '"' : x; }).join(";"); }).join("\r\n");
       var a = document.createElement("a");
@@ -517,11 +546,21 @@
         }));
         var ws = X.utils.aoa_to_sheet(aoa, { cellDates: true });
         vc.forEach(function (c, i) {
-          var z = c.tipo === "codigo" ? "0" : c.tipo === "moeda" ? '"R$" #,##0.00' : c.tipo === "pct" ? "0.0%" : c.tipo === "num" ? (c.casas ? "#,##0." + "0".repeat(c.casas) : "#,##0") :
-                  c.tipo === "data" ? "dd/mm/yyyy" : c.tipo === "dataHora" ? "dd/mm/yyyy hh:mm" : null;
+          var z = formatoExcel(c);
           if (!z) return;
           for (var r = 1; r < aoa.length; r++) { var cel = ws[X.utils.encode_cell({ r: r, c: i })]; if (cel && cel.t !== "s") cel.z = z; }
         });
+        // Linha de total com as mesmas colunas somadas na tela. SUBTOTAL(109) soma só o que o filtro do Excel deixar visível.
+        var n = aoa.length;
+        if (vis.length && vc.some(totaliza)) {
+          vc.forEach(function (c, i) {
+            var ref = X.utils.encode_cell({ r: n, c: i }), col = X.utils.encode_col(i);
+            if (totaliza(c)) {
+              ws[ref] = { t: "n", v: somaVisiveis(c), f: "SUBTOTAL(109," + col + "2:" + col + n + ")", z: formatoExcel(c) };
+            } else if (i === 0) ws[ref] = { t: "s", v: "Total" };
+          });
+          ws["!ref"] = X.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: n, c: vc.length - 1 } });
+        }
         ws["!cols"] = vc.map(function (c, i) {
           var w = aoa.slice(0, 200).reduce(function (m, r) { return Math.max(m, String(r[i] instanceof Date ? "00/00/0000 00:00" : r[i]).length); }, 6);
           return { wch: Math.min(w + 2, 60) };
@@ -561,6 +600,7 @@
       el: alvo,
       dados: function (linhas) {
         todas = linhas || [];
+        abertos = {};
         var existe = {};
         todas.forEach(function (l) { if (podeMarcar(l)) existe[l[o.chave]] = l; });
         Object.keys(sel).forEach(function (k) { if (existe[k]) sel[k] = existe[k]; else delete sel[k]; });
