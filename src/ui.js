@@ -183,6 +183,50 @@
     aplica();
     var n = 0;
     var t = setInterval(function () { aplica(); if (++n >= 6) clearInterval(t); }, 400);
+    botaoComponenteBI();
+  }
+
+  /* No lugar do botao da moldura que some acima: a engrenagem que leva a tela de Componentes de BI ja neste
+     componente. So para quem tem acesso a tela (PermissaoAcessoSP.reset do recurso, decodificado pela funcao do
+     proprio Sankhya, utxt, da janela que hospeda o dash: supervisor ou "C" liberado). O numero do componente vem
+     no endereco do dash (nuGdg); a tela abre pelo workspace do Sankhya com a chave NUGDG (GadgetBuilder.loadByPK). */
+  var RECURSO_BI = "br.com.sankhya.core.cfg.GadgetBuilder";
+  function janelaCom(teste) {
+    var l = [];
+    try { l.push(window.top); } catch (e) {}
+    try { l.push(window.parent.parent); } catch (e) {}
+    try { l.push(window.parent); } catch (e) {}
+    for (var i = 0; i < l.length; i++) { try { if (l[i] && teste(l[i])) return l[i]; } catch (e) {} }
+    return null;
+  }
+  async function acessoComponentesBI() {
+    var w = janelaCom(function (x) { return typeof x.utxt === "function"; });
+    if (!w) return false;
+    var rb = await N.sankhya.servico("PermissaoAcessoSP.reset", { resource: { id: RECURSO_BI } });
+    var cod = rb && rb.authorizationSf && rb.authorizationSf.$;
+    if (!cod) return false;
+    var doc = new DOMParser().parseFromString(w.utxt(cod), "text/xml");
+    var raiz = doc.getElementsByTagName("authorization")[0] || doc.documentElement;
+    if (raiz.getAttribute("isSup") === "S") return true;
+    var itens = raiz.getElementsByTagName("item");
+    for (var i = 0; i < itens.length; i++)
+      if (itens[i].getAttribute("name") === "C" && String(itens[i].getAttribute("status")) === "true") return true;
+    return false;
+  }
+  async function botaoComponenteBI() {
+    var nuGdg = +(new URLSearchParams(window.location.search).get("nuGdg") || 0);
+    if (!nuGdg || document.getElementById("nui-botao-bi") || !(await acessoComponentesBI())) return;
+    if (document.getElementById("nui-botao-bi")) return;
+    var b = el("button", "nui-bi", '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>');
+    b.id = "nui-botao-bi";
+    b.type = "button";
+    b.title = "Componente de BI " + nuGdg;
+    b.setAttribute("aria-label", b.title);
+    b.onclick = function () {
+      var w = janelaCom(function (x) { return x.workspace && typeof x.workspace.openAppActivity === "function"; });
+      if (w) w.workspace.openAppActivity(RECURSO_BI, { NUGDG: nuGdg });
+    };
+    document.body.appendChild(b);
   }
 
   N.ui = { modal: modal, confirmar: confirmar, avisar: avisar, carregando: carregando, esconderMoldura: esconderMoldura, esc: esc };
