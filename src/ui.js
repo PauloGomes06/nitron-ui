@@ -20,16 +20,12 @@
   }
 
   var abertos = [];
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape" || !abertos.length) return;
-    abertos[abertos.length - 1].fecharPorEsc();
-  });
 
   /** Modal único das telas.
       Nitron.ui.modal({
         titulo, descricao, conteudo: "<html>" | Node, tamanho: "p" | "m" | "g",
         botoes: [{ texto, tipo: "primario" | "secundario" | "perigo", acao: async (m) => {...} | "fechar" }],
-        fecharAoClicarFora: false, aoFechar: () => {}
+        aoFechar: () => {}
       })
       → { el, corpo, fechar(), bloquear(bool) }
       Enquanto a ação de um botão roda, o modal fica bloqueado (Esc, X e botões) e o botão mostra carregando.
@@ -83,11 +79,10 @@
         abertos.splice(abertos.indexOf(api), 1);
         if (o.aoFechar) o.aoFechar();
       },
-      fecharPorEsc: function () { if (!bloqueado) api.fechar(); }
     };
 
     x.onclick = function () { if (!bloqueado) api.fechar(); };
-    if (o.fecharAoClicarFora) fundo.onclick = function (e) { if (e.target === fundo && !bloqueado) api.fechar(); };
+    /* Fecha so pelo X e pelos botoes: clique fora e Esc nao fecham (quem digitava perdia o que digitou). */
 
     botoes.forEach(function (b) {
       b.el.onclick = async function () {
