@@ -123,6 +123,8 @@ da tela fica só com o que é exclusivo dela. Só classes **novas**: telas antig
 - **Mensagens**: `.nui-info` (`-ok`, `-atencao`, `-erro`) para o que precisa ficar visível; `U.avisar` para o que some.
 - **Estados**: `.nui-estado` (`-erro`, `-sem-acesso`) com `<b>` o que aconteceu, `<p>` o motivo e o botão do próximo passo.
   Nenhum estado mudo: vazio diz por quê, erro diz a causa, sem acesso diz onde liberar.
+- **Tela que depende desta versão** põe `&min=1.6.0` no endereço da nitron-ui: endereço novo não tem cache, então ela não
+  pega a 1.5.x guardada do mesmo dia (o `?d=` só renova uma vez por dia).
 - **Cores** só pelas variáveis `--nui-*`, sempre em par cor + fundo (`--nui-ok` / `--nui-ok-fundo`…). Número com `.nui-num`.
 
 ## Desenvolver
