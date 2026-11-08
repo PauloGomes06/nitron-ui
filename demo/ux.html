@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nitron-ui — padrão de UX</title>
+<style>
+  body { margin: 0; background: #f4f6f9; }
+  .cat { max-width: 1280px; margin: 0 auto; }
+  .cat-peca { background: #fff; border: 1px solid #dde3ec; border-radius: 8px; padding: 16px; margin: 0 0 18px; }
+  .cat-peca > h2 { margin: 0 0 4px; font-size: 16px; }
+  .cat-peca > .cat-uso { margin: 0 0 12px; color: #5c6b7c; font-size: 13px; }
+  .cat-peca code { background: #eef2f7; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .cat-regras li { margin-bottom: 4px; }
+</style>
+<script src="../dist/nitron-ui.js"></script>
+</head>
+<body>
+<div class="nui-pagina cat">
+  <div class="nui-cabeca"><h1 class="nui-nome-tela">Padrão de UX das telas Nitron <span class="nui-status" id="versao"></span></h1></div>
+  <p class="nui-ajuda">Catálogo vivo: o que uma tela nova (HTML5 ou add-on) usa. Tudo vem da nitron-ui; CSS próprio da tela só para o que é exclusivo dela.
+    Molde completo em Vue: <code>nitron-comercial-addon/.../NITCML_Devolucoes</code>.</p>
+
+  <section class="cat-peca">
+    <h2>Regras</h2>
+    <ul class="cat-regras">
+      <li><b>Leitura em 15 px</b> (<code>--nui-t-leitura</code>); 12 px só para rótulo e legenda (<code>--nui-t-rotulo</code>). Grade densa em 14 px dentro de <code>.nui-pagina</code>.</li>
+      <li><b>Cor com significado vem em par</b> (cor + fundo): ok, atenção, erro, info. Nada de cor fixa no CSS da tela: use as variáveis <code>--nui-*</code>.</li>
+      <li><b>Número em coluna</b> com <code>.nui-num</code> (tabular-nums), senão não alinha.</li>
+      <li><b>Botão diz o verbo</b> ("Registrar devolução", não "OK"). Um único primário por grupo. Confirmação (<code>U.confirmar</code>) só para o que é irreversível ou sai para fora.</li>
+      <li><b>Nenhum estado mudo</b>: vazio diz por quê, erro diz a causa e o que fazer, sem acesso diz onde liberar. Mensagem com número e motivo.</li>
+      <li><b>Responsivo de 1366 a 768 px</b> sem rolagem horizontal da página; grade larga rola dentro da própria caixa.</li>
+    </ul>
+  </section>
+
+  <section class="cat-peca">
+    <h2>Cabeçalho e barra de filtros</h2>
+    <p class="cat-uso"><code>.nui-cabeca</code> + <code>.nui-nome-tela</code>, <code>.nui-barra</code> (campos, <code>.nui-espaco</code>, <code>.nui-status</code>), <code>.nui-abas</code>/<code>.nui-aba.sel</code>.</p>
+    <div class="nui-cabeca"><h1 class="nui-nome-tela">Central de exemplos</h1></div>
+    <div class="nui-barra">
+      <input type="text" placeholder="Caso, nota, código ou nome do parceiro">
+      <select><option>Todas as empresas</option><option>Empresa 1</option></select>
+      <button class="nui-bt nui-bt-primario" type="button">Atualizar</button>
+      <span class="nui-status">2 caso(s) · 1 atrasado(s)</span>
+    </div>
+    <div class="nui-barra">
+      <div class="nui-abas"><button class="nui-aba sel" type="button">Comigo</button><button class="nui-aba" type="button">Todos</button><button class="nui-aba" type="button">Fechados</button></div>
+      <span class="nui-espaco"></span>
+      <button class="nui-bt nui-bt-secundario" type="button">Novo caso</button>
+    </div>
+  </section>
+
+  <section class="cat-peca">
+    <h2>Cartões de resumo</h2>
+    <p class="cat-uso"><code>.nui-cartoes</code> &gt; <code>.nui-cartao</code> (<code>-ok</code>, <code>-atencao</code>, <code>-erro</code>) com <code>&lt;span&gt;</code> rótulo, <code>&lt;b&gt;</code> valor, <code>&lt;span&gt;</code> detalhe.</p>
+    <div class="nui-cartoes">
+      <div class="nui-cartao"><span>Valor</span><b>R$ 1.500,50</b><span>NF 1234 · TOP 1203</span></div>
+      <div class="nui-cartao nui-cartao-atencao"><span>Situação</span><b>Aprovação</b><span>aberto em 05/11</span></div>
+      <div class="nui-cartao nui-cartao-erro"><span>Dias</span><b>3</b><span>atrasado (prazo 1)</span></div>
+      <div class="nui-cartao nui-cartao-ok"><span>Crédito</span><b>Compensado</b><span>título 80</span></div>
+    </div>
+  </section>
+
+  <section class="cat-peca">
+    <h2>Mensagens no meio da tela</h2>
+    <p class="cat-uso"><code>.nui-info</code> (<code>-ok</code>, <code>-atencao</code>, <code>-erro</code>). Aviso que some sozinho é o <code>U.avisar</code>; o que precisa ficar visível é <code>.nui-info</code>.</p>
+    <div class="nui-info">O destino do crédito é obrigatório: o financeiro executa o que for escolhido aqui.</div>
+    <div class="nui-info nui-info-ok">Os produtos devolvidos estão na NF de referência.</div>
+    <div class="nui-info nui-info-atencao">Central desligada (Parâmetros Nitron: COMERCIAL / LIGADO = N): a tela não segura boleto.</div>
+    <div class="nui-info nui-info-erro">Produto(s) fora da NF de referência: REF-10, REF-22.</div>
+  </section>
+
+  <section class="cat-peca">
+    <h2>Ações e formulário em painel</h2>
+    <p class="cat-uso"><code>.nui-acoes</code> (só os botões que o servidor devolveu), <code>.nui-painel</code> &gt; <code>h2</code> + <code>.nui-ajuda</code> + <code>.nui-campo</code> (<code>.nui-par</code> = dois por linha, vira um abaixo de 560 px).</p>
+    <div class="nui-acoes">
+      <button class="nui-bt nui-bt-primario" type="button">Registrar devolução</button>
+      <button class="nui-bt nui-bt-secundario" type="button">Abrir nota</button>
+      <button class="nui-bt nui-bt-secundario" type="button">Fechar caso</button>
+    </div>
+    <div class="nui-painel">
+      <h2>Registrar devolução</h2>
+      <p class="nui-ajuda">O destino do crédito é obrigatório: o financeiro executa o que for escolhido aqui.</p>
+      <div class="nui-par">
+        <label class="nui-campo"><span>Motivo</span><select><option>Selecione…</option><option>1 - Avaria</option></select></label>
+        <label class="nui-campo"><span>O material volta?</span><select><option>Sim, volta</option></select></label>
+      </div>
+      <label class="nui-campo"><span>Local e orientações para a coleta</span><textarea></textarea></label>
+      <div class="nui-acoes"><button class="nui-bt nui-bt-primario" type="button">Registrar</button><button class="nui-bt nui-bt-secundario" type="button">Cancelar</button></div>
+    </div>
+  </section>
+
+  <section class="cat-peca">
+    <h2>Estados: vazio, erro, sem acesso</h2>
+    <p class="cat-uso"><code>.nui-estado</code> (<code>-erro</code>, <code>-sem-acesso</code>) com <code>&lt;b&gt;</code> o que aconteceu, <code>&lt;p&gt;</code> o motivo e, se houver, o botão do próximo passo. Carregando: <code>U.carregando(el, "Buscando…")</code>.</p>
+    <div class="nui-duas-colunas">
+      <div>
+        <div class="nui-estado"><b>Nenhum caso com você agora.</b><p>Os casos da sua área (Pós-venda) estão em dia. Veja todos em "Todos".</p><button class="nui-bt nui-bt-secundario" type="button">Ver todos</button></div>
+      </div>
+      <div>
+        <div class="nui-estado nui-estado-erro"><b>Não deu para carregar a central.</b><p>O add-on nitron-comercial não respondeu (404). Confira se ele está instalado neste servidor.</p><button class="nui-bt nui-bt-secundario" type="button">Tentar de novo</button></div>
+        <div class="nui-estado nui-estado-sem-acesso" style="margin-top:12px"><b>Você não tem acesso a esta tela.</b><p>Peça a liberação de "Central de devoluções" no Controle de Acessos (por usuário ou grupo).</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cat-peca">
+    <h2>Detalhe em duas colunas</h2>
+    <p class="cat-uso"><code>.nui-detalhe</code> &gt; <code>.nui-duas-colunas</code> (vira uma abaixo de 1300 px), <code>.nui-secao</code>, <code>.nui-bloco</code>, <code>.nui-texto-pre</code>, <code>.nui-num</code>, <code>.nui-suave</code>.</p>
+    <div class="nui-detalhe">
+      <div class="nui-duas-colunas">
+        <div>
+          <h3 class="nui-secao">Chamado de pós-venda</h3>
+          <div class="nui-bloco"><b>Chamado 88</b> · Avaria · Pós-venda · aberto por ANA em 04/11 <span class="nui-suave">· sem nota</span></div>
+          <h3 class="nui-secao">Histórico</h3>
+          <pre class="nui-texto-pre">05/11 10:02 caso aberto pelo chamado
+05/11 14:30 registrado: volta, coleta no cliente</pre>
+        </div>
+        <div>
+          <h3 class="nui-secao">Títulos da venda</h3>
+          <div id="g-exemplo"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  document.getElementById('versao').textContent = 'nitron-ui ' + Nitron.versao;
+  Nitron.ui.grade(document.getElementById('g-exemplo'), { id: 'cat-ux', chave: 'nufin', exportar: false, vazio: 'Sem títulos da venda.',
+    colunas: [{ campo: 'nufin', titulo: 'Nº único', tipo: 'codigo' }, { campo: 'valor', titulo: 'Valor', tipo: 'moeda', total: true },
+      { campo: 'dtVenc', titulo: 'Vencimento' }, { campo: 'sit', titulo: 'Boleto', tipo: 'situacao', situacoes: { S: { texto: 'Segurado', cor: 'erro' }, G: { texto: 'Na régua', cor: 'ok' } } }]
+  }).dados([{ nufin: 70, valor: 500, dtVenc: '10/12/2026', sit: 'S' }, { nufin: 71, valor: 1000.5, dtVenc: '10/01/2027', sit: 'G' }]);
+</script>
+</body>
+</html>

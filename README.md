@@ -107,6 +107,24 @@ Já resolvido aqui, para nenhuma tela repetir:
 
 Configuração opcional: `S.configurar({ lote: 30, tamParam: 0, mgeSession: false })` (`false` desliga o envio da sessão; um texto fixa o valor).
 
+## Padrão de UX (1.6.0)
+
+Catálogo vivo em [`demo/ux.html`](demo/ux.html): toda tela nova (HTML5 ou add-on) monta o visual com estas classes, e o CSS
+da tela fica só com o que é exclusivo dela. Só classes **novas**: telas antigas não mudam.
+
+- **Invólucro** `.nui-pagina`: leitura em 15 px, rótulo em 12 px (`--nui-t-leitura`, `--nui-t-rotulo`), grade em 14 px,
+  `[hidden]` funcionando (o CSS do Sankhya vence o atributo) e `box-sizing`.
+- **Cabeçalho e filtros**: `.nui-cabeca` + `.nui-nome-tela`, `.nui-barra` (campos, `.nui-espaco`, `.nui-status`),
+  `.nui-abas` / `.nui-aba.sel`.
+- **Resumo**: `.nui-cartoes` > `.nui-cartao` (`-ok`, `-atencao`, `-erro`).
+- **Ações e formulário**: `.nui-acoes` (um único `.nui-bt-primario`; o resto `.nui-bt-secundario`), `.nui-painel` > `h2` +
+  `.nui-ajuda` + `.nui-campo`, `.nui-par` (dois por linha, um abaixo de 560 px).
+- **Detalhe**: `.nui-detalhe` > `.nui-duas-colunas` (uma abaixo de 1300 px), `.nui-secao`, `.nui-bloco`, `.nui-texto-pre`.
+- **Mensagens**: `.nui-info` (`-ok`, `-atencao`, `-erro`) para o que precisa ficar visível; `U.avisar` para o que some.
+- **Estados**: `.nui-estado` (`-erro`, `-sem-acesso`) com `<b>` o que aconteceu, `<p>` o motivo e o botão do próximo passo.
+  Nenhum estado mudo: vazio diz por quê, erro diz a causa, sem acesso diz onde liberar.
+- **Cores** só pelas variáveis `--nui-*`, sempre em par cor + fundo (`--nui-ok` / `--nui-ok-fundo`…). Número com `.nui-num`.
+
 ## Desenvolver
 
 `src/` → `node build.mjs` → `dist/nitron-ui.js`. Testes: `node teste/format.test.mjs`, `node teste/pref.test.mjs` e `demo/index.html`
