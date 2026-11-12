@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 
 const versao = JSON.parse(readFileSync("package.json", "utf8")).version;
 const css = readFileSync("src/estilo.css", "utf8").replace(/\s*\n\s*/g, " ").trim();
-const partes = ["format.js", "sankhya.js", "pref.js", "ui.js", "grade.js"].map((f) => readFileSync(`src/${f}`, "utf8"));
+const partes = ["format.js", "sankhya.js", "pref.js", "ui.js", "grade.js", "pesquisa.js"].map((f) => readFileSync(`src/${f}`, "utf8"));
 
 const saida = `/*! nitron-ui ${versao} — telas HTML5 do Sankhya da Nitron */
 (function () {

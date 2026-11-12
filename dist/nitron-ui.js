@@ -1,10 +1,10 @@
-/*! nitron-ui 1.6.0 — telas HTML5 do Sankhya da Nitron */
+/*! nitron-ui 1.7.0 — telas HTML5 do Sankhya da Nitron */
 (function () {
   if (window.Nitron && window.Nitron.versao) return;
-  window.Nitron = { versao: "1.6.0" };
+  window.Nitron = { versao: "1.7.0" };
   var s = document.createElement("style");
-  s.setAttribute("data-nitron-ui", "1.6.0");
-  s.textContent = ":root { --nui-fundo: #f4f6f9; --nui-painel: #ffffff; --nui-linha: #dde3ec; --nui-texto: #1c2733; --nui-suave: #5c6b7c; --nui-destaque: #0a6ea8; --nui-ok: #1e7d32; --nui-atencao: #b26a00; --nui-erro: #c62828; --nui-raio: 10px; --nui-fonte: 13px/1.45 \"Segoe UI\", system-ui, sans-serif; } .nui-fundo { position: fixed; inset: 0; z-index: 9000; background: rgba(28, 39, 51, .45); display: flex; align-items: center; justify-content: center; padding: 16px; animation: nui-aparece .12s ease-out; } .nui-modal { background: var(--nui-painel); color: var(--nui-texto); font: var(--nui-fonte); border-radius: var(--nui-raio); box-shadow: 0 12px 40px rgba(0, 0, 0, .25); width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; } .nui-p { max-width: 400px; } .nui-m { max-width: 560px; } .nui-g { max-width: 900px; } .nui-topo { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--nui-linha); } .nui-titulos { flex: 1; min-width: 0; } .nui-titulo { font-size: 15px; font-weight: 700; } .nui-descricao { color: var(--nui-suave); margin-top: 2px; } .nui-x { border: 0; background: none; font-size: 22px; line-height: 1; color: var(--nui-suave); cursor: pointer; padding: 0 4px; border-radius: 6px; } .nui-x:hover:not(:disabled) { background: var(--nui-fundo); color: var(--nui-texto); } .nui-corpo { padding: 16px 18px; overflow-y: auto; } .nui-msg { margin: 0; } .nui-erro { margin: 0 18px 12px; padding: 8px 10px; border-radius: 6px; background: #fdecea; color: var(--nui-erro); } .nui-rodape { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--nui-linha); background: #fafbfc; } .nui-bt { font: inherit; font-weight: 600; border-radius: 6px; padding: 7px 16px; cursor: pointer; border: 1px solid transparent; } .nui-bt:disabled { opacity: .55; cursor: not-allowed; } .nui-bt-primario { background: var(--nui-destaque); color: #fff; } .nui-bt-perigo { background: var(--nui-erro); color: #fff; } .nui-bt-secundario { background: #fff; color: var(--nui-texto); border-color: var(--nui-linha); } .nui-bt-secundario:hover:not(:disabled) { background: var(--nui-fundo); } .nui-girando::before, .nui-roda { content: \"\"; display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: nui-gira .7s linear infinite; vertical-align: -2px; margin-right: 6px; } .nui-avisos { position: fixed; right: 16px; bottom: 16px; z-index: 9100; display: flex; flex-direction: column; gap: 8px; max-width: 380px; font: var(--nui-fonte); } .nui-aviso { padding: 10px 14px; border-radius: 8px; color: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, .2); cursor: pointer; animation: nui-aparece .15s ease-out; } .nui-aviso-ok { background: var(--nui-ok); } .nui-aviso-erro { background: var(--nui-erro); } .nui-aviso-atencao { background: var(--nui-atencao); } .nui-carregando { position: absolute; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 4px; background: rgba(255, 255, 255, .75); color: var(--nui-suave); font: var(--nui-fonte); } .nui-carregando.nui-tela { position: fixed; z-index: 8900; } @keyframes nui-gira { to { transform: rotate(360deg); } } @keyframes nui-aparece { from { opacity: 0; } to { opacity: 1; } } .nui-grade { display: flex; flex-direction: column; min-height: 0; background: var(--nui-painel); border: 1px solid var(--nui-linha); border-radius: var(--nui-raio); font: var(--nui-fonte); color: var(--nui-texto); } .nui-g-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--nui-linha); } .nui-g-busca { font: inherit; padding: 6px 10px; border: 1px solid var(--nui-linha); border-radius: 6px; min-width: 200px; } .nui-g-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--nui-linha); background: #fafbfc; } .nui-g-acoes { margin-left: auto; } .nui-g-acoes { display: flex; gap: 6px; } .nui-chip { display: inline-flex; align-items: center; gap: 4px; background: #e3effa; color: #0a4f78; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12px; } .nui-chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 4px; border-radius: 50%; } .nui-chip button:hover { background: rgba(10, 110, 168, .15); } .nui-g-limpar { border: 0; background: none; color: var(--nui-destaque); cursor: pointer; font: inherit; font-size: 12px; text-decoration: underline; } .nui-g-rolagem { overflow: auto; flex: 1; min-height: 0; } .nui-grade table { width: 100%; border-collapse: separate; border-spacing: 0; } .nui-grade th { position: sticky; top: 0; z-index: 1; background: #eef2f7; text-align: left; font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--nui-linha); white-space: nowrap; cursor: pointer; user-select: none; } .nui-grade th:hover { background: #e3e9f1; } .nui-grade td { padding: 7px 10px; border-bottom: 1px solid #edf0f4; white-space: nowrap; } .nui-grade tbody tr:hover td { background: #f7f9fc; } .nui-grade tfoot td { position: sticky; bottom: 0; background: #f7f9fc; font-weight: 700; border-top: 1px solid var(--nui-linha); } .nui-grade .nui-dir { text-align: right; font-variant-numeric: tabular-nums; } .nui-g-ck { width: 32px; text-align: center; } .nui-g-marcada td { background: #e3effa !important; } .nui-g-clicavel { cursor: pointer; } .nui-g-aberta td { background: #eef4fa; font-weight: 600; } .nui-grade tr.nui-g-detalhe td { white-space: normal; background: #fbfcfe; padding: 10px 14px 14px; border-bottom: 2px solid var(--nui-linha); } .nui-grade tbody tr.nui-g-detalhe:hover td { background: #fbfcfe; } .nui-g-esperando { color: var(--nui-suave); } .nui-g-erro { color: var(--nui-erro); } .nui-g-vazio { text-align: center; color: var(--nui-suave); padding: 28px !important; white-space: normal !important; } .nui-g-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; color: var(--nui-suave); border-top: 1px solid var(--nui-linha); font-size: 12px; } .nui-g-pag { display: flex; align-items: center; gap: 4px; } .nui-g-pag label { margin-right: 8px; } .nui-g-pag select { font: inherit; padding: 2px 4px; border: 1px solid var(--nui-linha); border-radius: 4px; } .nui-g-ir { font: inherit; font-size: 14px; width: 28px; height: 26px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; color: var(--nui-texto); } .nui-g-ir:disabled { opacity: .4; cursor: default; } .nui-g-npag { padding: 0 6px; white-space: nowrap; } .nui-sit { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; } .nui-sit-ok { background: #e6f4ea; color: var(--nui-ok); } .nui-sit-atencao { background: #fff3e0; color: var(--nui-atencao); } .nui-sit-erro { background: #fdecea; color: var(--nui-erro); } .nui-sit-info { background: #e3effa; color: var(--nui-destaque); } .nui-sit-neutro { background: #eef2f7; color: var(--nui-suave); } .nui-filtros { display: flex; flex-direction: column; gap: 10px; } .nui-f-linha { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 8px; align-items: start; } .nui-f-nome { font-weight: 600; padding-top: 5px; } .nui-f-linha input[type=text], .nui-f-linha input[type=number], .nui-f-linha input[type=date], .nui-f-salvar input { font: inherit; padding: 5px 8px; border: 1px solid var(--nui-linha); border-radius: 6px; } .nui-f-linha input[type=number], .nui-f-linha input[type=date] { width: 150px; } .nui-f-linha input[type=text] { width: 100%; box-sizing: border-box; } .nui-f-faixa { display: flex; align-items: center; gap: 6px; } .nui-f-faixa input[type=text], .nui-f-faixa input[type=date] { flex: 1 1 0; width: auto; min-width: 0; box-sizing: border-box; } .nui-f-op { display: inline-flex; align-items: center; gap: 4px; margin: 2px 12px 2px 0; cursor: pointer; } .nui-f-salvos { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--nui-linha); } .nui-f-lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .nui-chip-salvo { background: #eef2f7; color: var(--nui-texto); padding: 2px 4px 2px 2px; } .nui-chip-salvo .nui-f-usar { font: inherit; font-size: 12px; padding: 2px 8px; border-radius: 999px; } .nui-f-dica { color: var(--nui-suave); } .nui-f-salvar { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--nui-linha); } .nui-f-salvar input { flex: 1; } .nui-colunas { display: flex; flex-direction: column; margin-top: 8px; } .nui-col-linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 1px 4px; border-radius: 4px; } .nui-col-linha:hover { background: #f3f6fa; } .nui-col-somar { margin-left: auto; font-size: 12px; color: var(--nui-suave); white-space: nowrap; cursor: pointer; } .nui-col-mover button { font: inherit; width: 26px; height: 24px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; margin-left: 2px; } .nui-col-mover button:hover { border-color: var(--nui-destaque); color: var(--nui-destaque); } .nui-grade th.nui-g-arrastando { opacity: .45; } .nui-grade th.nui-g-alvo-esq { box-shadow: inset 3px 0 0 var(--nui-destaque); } .nui-grade th.nui-g-alvo-dir { box-shadow: inset -3px 0 0 var(--nui-destaque); } /* engrenagem do componente de BI (esconderMoldura): discreta no canto; o hover so acende, nao troca a cor */ .nui-bi{position:fixed;top:4px;right:4px;z-index:2147483000;width:24px;height:24px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid #d5dde6;border-radius:6px;background:#fff;color:#7a8794;opacity:.55;cursor:pointer} .nui-bi:hover{opacity:1} /* trecho achado pela busca da grade */ .nui-grade mark.nui-g-achado { background: #ffe58a; color: inherit; padding: 0; border-radius: 2px; } /* ===== UX padrao das telas (1.6.0). So classes NOVAS: nada acima muda, telas antigas ficam iguais. Base de leitura 15px (12px so rotulo), cor com significado em par (cor + fundo), numero com tabular-nums. Catalogo: demo/ux.html. Regras: secao \"Tela nova\" do Sankhya/CLAUDE.md. ===== */ :root { --nui-ok-fundo: #e7f3e9; --nui-atencao-fundo: #fdf3dd; --nui-erro-fundo: #fdecea; --nui-info: #0a6ea8; --nui-info-fundo: #e7f0f7; --nui-t-leitura: 15px; --nui-t-rotulo: 12px; --nui-t-titulo: 20px; } .nui-pagina { font: var(--nui-t-leitura)/1.5 \"Segoe UI\", system-ui, sans-serif; color: var(--nui-texto); padding: 12px 16px; --nui-fonte: 14px/1.45 \"Segoe UI\", system-ui, sans-serif; } .nui-pagina *, .nui-pagina *::before, .nui-pagina *::after { box-sizing: border-box; } .nui-pagina [hidden] { display: none !important; } .nui-pagina button, .nui-pagina input, .nui-pagina select, .nui-pagina textarea { font-family: inherit; } .nui-pagina .nui-bt { font-size: 14px; min-height: 36px; } .nui-cabeca { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; } .nui-nome-tela { margin: 0; font-size: var(--nui-t-titulo); font-weight: 700; } .nui-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; } .nui-barra input, .nui-barra select { height: 36px; padding: 0 10px; border: 1px solid var(--nui-linha); border-radius: 6px; background: #fff; font-size: var(--nui-t-leitura); color: var(--nui-texto); max-width: 100%; } .nui-barra input[type=text], .nui-barra input[type=search] { width: 360px; } .nui-espaco { flex: 1; } .nui-status { font-size: var(--nui-t-rotulo); color: var(--nui-suave); } .nui-abas { display: inline-flex; border: 1px solid var(--nui-linha); border-radius: 6px; overflow: hidden; } .nui-aba { border: 0; border-right: 1px solid var(--nui-linha); background: #fff; color: var(--nui-texto); padding: 0 14px; height: 36px; font-size: 14px; font-weight: 600; cursor: pointer; } .nui-aba:last-child { border-right: 0; } .nui-aba:hover:not(.sel) { background: var(--nui-fundo); } .nui-aba.sel { background: var(--nui-destaque); color: #fff; } .nui-cartoes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; } .nui-cartao { flex: 0 1 auto; min-width: 160px; background: var(--nui-painel); border: 1px solid var(--nui-linha); border-radius: 8px; padding: 8px 14px; } .nui-cartao > span { display: block; font-size: var(--nui-t-rotulo); color: var(--nui-suave); } .nui-cartao > b { display: block; font-size: 18px; font-variant-numeric: tabular-nums; } .nui-cartao-ok { background: var(--nui-ok-fundo); border-color: #b9dcc0; } .nui-cartao-atencao { background: var(--nui-atencao-fundo); border-color: #f0d49a; } .nui-cartao-erro { background: var(--nui-erro-fundo); border-color: #f2b8b2; } .nui-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; } .nui-painel { background: #fcfcfd; border: 1px solid var(--nui-linha); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; max-width: 900px; } .nui-painel > h2, .nui-secao { margin: 0 0 10px; font-size: var(--nui-t-leitura); font-weight: 700; } .nui-ajuda { margin: 0 0 10px; color: var(--nui-suave); } .nui-campo { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; min-width: 0; } .nui-campo > span { font-size: var(--nui-t-rotulo); color: var(--nui-suave); } .nui-campo input, .nui-campo select, .nui-campo textarea { width: 100%; min-width: 0; height: 36px; padding: 0 10px; border: 1px solid var(--nui-linha); border-radius: 6px; background: #fff; font-size: var(--nui-t-leitura); color: var(--nui-texto); } .nui-campo textarea { height: auto; min-height: 64px; padding: 6px 10px; } .nui-campo input:focus, .nui-campo select:focus, .nui-campo textarea:focus, .nui-barra input:focus, .nui-barra select:focus { outline: none; border-color: var(--nui-destaque); } .nui-par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; } .nui-duas-colunas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; } .nui-duas-colunas > div > * + .nui-secao { margin-top: 16px; } .nui-detalhe { margin-top: 16px; border-top: 2px solid var(--nui-destaque); padding-top: 12px; } .nui-bloco { line-height: 1.6; } .nui-texto-pre { white-space: pre-wrap; font: 13px/1.5 Consolas, monospace; background: #f6f7f9; border: 1px solid var(--nui-linha); border-radius: 6px; padding: 8px 10px; max-height: 260px; overflow-y: auto; margin: 0; } .nui-info { display: block; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; background: var(--nui-info-fundo); color: #0a4f78; border: 1px solid #c9dcf0; } .nui-info-ok { background: var(--nui-ok-fundo); color: var(--nui-ok); border-color: #b9dcc0; } .nui-info-atencao { background: var(--nui-atencao-fundo); color: #7a4d00; border-color: #f0d49a; } .nui-info-erro { background: var(--nui-erro-fundo); color: var(--nui-erro); border-color: #f2b8b2; } .nui-num { font-variant-numeric: tabular-nums; } .nui-suave { color: var(--nui-suave); } .nui-forte-erro { color: var(--nui-erro); font-weight: 700; } .nui-estado { text-align: center; padding: 28px 16px; border: 1px dashed var(--nui-linha); border-radius: 8px; color: var(--nui-suave); background: var(--nui-painel); } .nui-estado > b { display: block; color: var(--nui-texto); margin-bottom: 4px; } .nui-estado > p { margin: 0 0 10px; } .nui-estado-erro { border-style: solid; border-color: #f2b8b2; background: var(--nui-erro-fundo); } .nui-estado-erro > b { color: var(--nui-erro); } .nui-estado-sem-acesso { border-style: solid; border-color: #f0d49a; background: var(--nui-atencao-fundo); } @media (max-width: 1300px) { .nui-duas-colunas { grid-template-columns: minmax(0, 1fr); } } @media (max-width: 560px) { .nui-par { grid-template-columns: minmax(0, 1fr); } .nui-barra input[type=text], .nui-barra input[type=search] { width: 100%; } }";
+  s.setAttribute("data-nitron-ui", "1.7.0");
+  s.textContent = ":root { --nui-fundo: #f4f6f9; --nui-painel: #ffffff; --nui-linha: #dde3ec; --nui-texto: #1c2733; --nui-suave: #5c6b7c; --nui-destaque: #0a6ea8; --nui-ok: #1e7d32; --nui-atencao: #b26a00; --nui-erro: #c62828; --nui-raio: 10px; --nui-fonte: 13px/1.45 \"Segoe UI\", system-ui, sans-serif; } .nui-fundo { position: fixed; inset: 0; z-index: 9000; background: rgba(28, 39, 51, .45); display: flex; align-items: center; justify-content: center; padding: 16px; animation: nui-aparece .12s ease-out; } .nui-modal { background: var(--nui-painel); color: var(--nui-texto); font: var(--nui-fonte); border-radius: var(--nui-raio); box-shadow: 0 12px 40px rgba(0, 0, 0, .25); width: 100%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; } .nui-p { max-width: 400px; } .nui-m { max-width: 560px; } .nui-g { max-width: 900px; } .nui-topo { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--nui-linha); } .nui-titulos { flex: 1; min-width: 0; } .nui-titulo { font-size: 15px; font-weight: 700; } .nui-descricao { color: var(--nui-suave); margin-top: 2px; } .nui-x { border: 0; background: none; font-size: 22px; line-height: 1; color: var(--nui-suave); cursor: pointer; padding: 0 4px; border-radius: 6px; } .nui-x:hover:not(:disabled) { background: var(--nui-fundo); color: var(--nui-texto); } .nui-corpo { padding: 16px 18px; overflow-y: auto; } .nui-msg { margin: 0; } .nui-erro { margin: 0 18px 12px; padding: 8px 10px; border-radius: 6px; background: #fdecea; color: var(--nui-erro); } .nui-rodape { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--nui-linha); background: #fafbfc; } .nui-bt { font: inherit; font-weight: 600; border-radius: 6px; padding: 7px 16px; cursor: pointer; border: 1px solid transparent; } .nui-bt:disabled { opacity: .55; cursor: not-allowed; } .nui-bt-primario { background: var(--nui-destaque); color: #fff; } .nui-bt-perigo { background: var(--nui-erro); color: #fff; } .nui-bt-secundario { background: #fff; color: var(--nui-texto); border-color: var(--nui-linha); } .nui-bt-secundario:hover:not(:disabled) { background: var(--nui-fundo); } .nui-girando::before, .nui-roda { content: \"\"; display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: nui-gira .7s linear infinite; vertical-align: -2px; margin-right: 6px; } .nui-avisos { position: fixed; right: 16px; bottom: 16px; z-index: 9100; display: flex; flex-direction: column; gap: 8px; max-width: 380px; font: var(--nui-fonte); } .nui-aviso { padding: 10px 14px; border-radius: 8px; color: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, .2); cursor: pointer; animation: nui-aparece .15s ease-out; } .nui-aviso-ok { background: var(--nui-ok); } .nui-aviso-erro { background: var(--nui-erro); } .nui-aviso-atencao { background: var(--nui-atencao); } .nui-carregando { position: absolute; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; gap: 4px; background: rgba(255, 255, 255, .75); color: var(--nui-suave); font: var(--nui-fonte); } .nui-carregando.nui-tela { position: fixed; z-index: 8900; } @keyframes nui-gira { to { transform: rotate(360deg); } } @keyframes nui-aparece { from { opacity: 0; } to { opacity: 1; } } .nui-grade { display: flex; flex-direction: column; min-height: 0; background: var(--nui-painel); border: 1px solid var(--nui-linha); border-radius: var(--nui-raio); font: var(--nui-fonte); color: var(--nui-texto); } .nui-g-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--nui-linha); } .nui-g-busca { font: inherit; padding: 6px 10px; border: 1px solid var(--nui-linha); border-radius: 6px; min-width: 200px; } .nui-g-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 12px; border-bottom: 1px solid var(--nui-linha); background: #fafbfc; } .nui-g-acoes { margin-left: auto; } .nui-g-acoes { display: flex; gap: 6px; } .nui-chip { display: inline-flex; align-items: center; gap: 4px; background: #e3effa; color: #0a4f78; border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12px; } .nui-chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 4px; border-radius: 50%; } .nui-chip button:hover { background: rgba(10, 110, 168, .15); } .nui-g-limpar { border: 0; background: none; color: var(--nui-destaque); cursor: pointer; font: inherit; font-size: 12px; text-decoration: underline; } .nui-g-rolagem { overflow: auto; flex: 1; min-height: 0; } .nui-grade table { width: 100%; border-collapse: separate; border-spacing: 0; } .nui-grade th { position: sticky; top: 0; z-index: 1; background: #eef2f7; text-align: left; font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--nui-linha); white-space: nowrap; cursor: pointer; user-select: none; } .nui-grade th:hover { background: #e3e9f1; } .nui-grade td { padding: 7px 10px; border-bottom: 1px solid #edf0f4; white-space: nowrap; } .nui-grade tbody tr:hover td { background: #f7f9fc; } .nui-grade tfoot td { position: sticky; bottom: 0; background: #f7f9fc; font-weight: 700; border-top: 1px solid var(--nui-linha); } .nui-grade .nui-dir { text-align: right; font-variant-numeric: tabular-nums; } .nui-g-ck { width: 32px; text-align: center; } .nui-g-marcada td { background: #e3effa !important; } .nui-g-clicavel { cursor: pointer; } .nui-g-aberta td { background: #eef4fa; font-weight: 600; } .nui-grade tr.nui-g-detalhe td { white-space: normal; background: #fbfcfe; padding: 10px 14px 14px; border-bottom: 2px solid var(--nui-linha); } .nui-grade tbody tr.nui-g-detalhe:hover td { background: #fbfcfe; } .nui-g-esperando { color: var(--nui-suave); } .nui-g-erro { color: var(--nui-erro); } .nui-g-vazio { text-align: center; color: var(--nui-suave); padding: 28px !important; white-space: normal !important; } .nui-g-rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; color: var(--nui-suave); border-top: 1px solid var(--nui-linha); font-size: 12px; } .nui-g-pag { display: flex; align-items: center; gap: 4px; } .nui-g-pag label { margin-right: 8px; } .nui-g-pag select { font: inherit; padding: 2px 4px; border: 1px solid var(--nui-linha); border-radius: 4px; } .nui-g-ir { font: inherit; font-size: 14px; width: 28px; height: 26px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; color: var(--nui-texto); } .nui-g-ir:disabled { opacity: .4; cursor: default; } .nui-g-npag { padding: 0 6px; white-space: nowrap; } .nui-sit { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; } .nui-sit-ok { background: #e6f4ea; color: var(--nui-ok); } .nui-sit-atencao { background: #fff3e0; color: var(--nui-atencao); } .nui-sit-erro { background: #fdecea; color: var(--nui-erro); } .nui-sit-info { background: #e3effa; color: var(--nui-destaque); } .nui-sit-neutro { background: #eef2f7; color: var(--nui-suave); } .nui-filtros { display: flex; flex-direction: column; gap: 10px; } .nui-f-linha { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 8px; align-items: start; } .nui-f-nome { font-weight: 600; padding-top: 5px; } .nui-f-linha input[type=text], .nui-f-linha input[type=number], .nui-f-linha input[type=date], .nui-f-salvar input { font: inherit; padding: 5px 8px; border: 1px solid var(--nui-linha); border-radius: 6px; } .nui-f-linha input[type=number], .nui-f-linha input[type=date] { width: 150px; } .nui-f-linha input[type=text] { width: 100%; box-sizing: border-box; } .nui-f-faixa { display: flex; align-items: center; gap: 6px; } .nui-f-faixa input[type=text], .nui-f-faixa input[type=date] { flex: 1 1 0; width: auto; min-width: 0; box-sizing: border-box; } .nui-f-op { display: inline-flex; align-items: center; gap: 4px; margin: 2px 12px 2px 0; cursor: pointer; } .nui-f-salvos { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--nui-linha); } .nui-f-lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .nui-chip-salvo { background: #eef2f7; color: var(--nui-texto); padding: 2px 4px 2px 2px; } .nui-chip-salvo .nui-f-usar { font: inherit; font-size: 12px; padding: 2px 8px; border-radius: 999px; } .nui-f-dica { color: var(--nui-suave); } .nui-f-salvar { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--nui-linha); } .nui-f-salvar input { flex: 1; } .nui-colunas { display: flex; flex-direction: column; margin-top: 8px; } .nui-col-linha { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 1px 4px; border-radius: 4px; } .nui-col-linha:hover { background: #f3f6fa; } .nui-col-somar { margin-left: auto; font-size: 12px; color: var(--nui-suave); white-space: nowrap; cursor: pointer; } .nui-col-mover button { font: inherit; width: 26px; height: 24px; border: 1px solid var(--nui-linha); background: #fff; border-radius: 4px; cursor: pointer; margin-left: 2px; } .nui-col-mover button:hover { border-color: var(--nui-destaque); color: var(--nui-destaque); } .nui-grade th.nui-g-arrastando { opacity: .45; } .nui-grade th.nui-g-alvo-esq { box-shadow: inset 3px 0 0 var(--nui-destaque); } .nui-grade th.nui-g-alvo-dir { box-shadow: inset -3px 0 0 var(--nui-destaque); } /* engrenagem do componente de BI (esconderMoldura): discreta no canto; o hover so acende, nao troca a cor */ .nui-bi{position:fixed;top:4px;right:4px;z-index:2147483000;width:24px;height:24px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid #d5dde6;border-radius:6px;background:#fff;color:#7a8794;opacity:.55;cursor:pointer} .nui-bi:hover{opacity:1} /* trecho achado pela busca da grade */ .nui-grade mark.nui-g-achado { background: #ffe58a; color: inherit; padding: 0; border-radius: 2px; } /* ===== UX padrao das telas (1.6.0). So classes NOVAS: nada acima muda, telas antigas ficam iguais. Base de leitura 15px (12px so rotulo), cor com significado em par (cor + fundo), numero com tabular-nums. Catalogo: demo/ux.html. Regras: secao \"Tela nova\" do Sankhya/CLAUDE.md. ===== */ :root { --nui-ok-fundo: #e7f3e9; --nui-atencao-fundo: #fdf3dd; --nui-erro-fundo: #fdecea; --nui-info: #0a6ea8; --nui-info-fundo: #e7f0f7; --nui-t-leitura: 15px; --nui-t-rotulo: 12px; --nui-t-titulo: 20px; } .nui-pagina { font: var(--nui-t-leitura)/1.5 \"Segoe UI\", system-ui, sans-serif; color: var(--nui-texto); padding: 12px 16px; --nui-fonte: 14px/1.45 \"Segoe UI\", system-ui, sans-serif; } .nui-pagina *, .nui-pagina *::before, .nui-pagina *::after { box-sizing: border-box; } .nui-pagina [hidden] { display: none !important; } .nui-pagina button, .nui-pagina input, .nui-pagina select, .nui-pagina textarea { font-family: inherit; } .nui-pagina .nui-bt { font-size: 14px; min-height: 36px; } .nui-cabeca { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; } .nui-nome-tela { margin: 0; font-size: var(--nui-t-titulo); font-weight: 700; } .nui-barra { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; } .nui-barra input, .nui-barra select { height: 36px; padding: 0 10px; border: 1px solid var(--nui-linha); border-radius: 6px; background: #fff; font-size: var(--nui-t-leitura); color: var(--nui-texto); max-width: 100%; } .nui-barra input[type=text], .nui-barra input[type=search] { width: 360px; } .nui-espaco { flex: 1; } .nui-status { font-size: var(--nui-t-rotulo); color: var(--nui-suave); } .nui-abas { display: inline-flex; border: 1px solid var(--nui-linha); border-radius: 6px; overflow: hidden; } .nui-aba { border: 0; border-right: 1px solid var(--nui-linha); background: #fff; color: var(--nui-texto); padding: 0 14px; height: 36px; font-size: 14px; font-weight: 600; cursor: pointer; } .nui-aba:last-child { border-right: 0; } .nui-aba:hover:not(.sel) { background: var(--nui-fundo); } .nui-aba.sel { background: var(--nui-destaque); color: #fff; } .nui-cartoes { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; } .nui-cartao { flex: 0 1 auto; min-width: 160px; background: var(--nui-painel); border: 1px solid var(--nui-linha); border-radius: 8px; padding: 8px 14px; } .nui-cartao > span { display: block; font-size: var(--nui-t-rotulo); color: var(--nui-suave); } .nui-cartao > b { display: block; font-size: 18px; font-variant-numeric: tabular-nums; } .nui-cartao-ok { background: var(--nui-ok-fundo); border-color: #b9dcc0; } .nui-cartao-atencao { background: var(--nui-atencao-fundo); border-color: #f0d49a; } .nui-cartao-erro { background: var(--nui-erro-fundo); border-color: #f2b8b2; } .nui-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; } .nui-painel { background: #fcfcfd; border: 1px solid var(--nui-linha); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; max-width: 900px; } .nui-painel > h2, .nui-secao { margin: 0 0 10px; font-size: var(--nui-t-leitura); font-weight: 700; } .nui-ajuda { margin: 0 0 10px; color: var(--nui-suave); } .nui-campo { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; min-width: 0; } .nui-campo > span { font-size: var(--nui-t-rotulo); color: var(--nui-suave); } .nui-campo input, .nui-campo select, .nui-campo textarea { width: 100%; min-width: 0; height: 36px; padding: 0 10px; border: 1px solid var(--nui-linha); border-radius: 6px; background: #fff; font-size: var(--nui-t-leitura); color: var(--nui-texto); } .nui-campo textarea { height: auto; min-height: 64px; padding: 6px 10px; } .nui-campo input:focus, .nui-campo select:focus, .nui-campo textarea:focus, .nui-barra input:focus, .nui-barra select:focus { outline: none; border-color: var(--nui-destaque); } .nui-par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; } .nui-duas-colunas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; } .nui-duas-colunas > div > * + .nui-secao { margin-top: 16px; } .nui-detalhe { margin-top: 16px; border-top: 2px solid var(--nui-destaque); padding-top: 12px; } .nui-bloco { line-height: 1.6; } .nui-texto-pre { white-space: pre-wrap; font: 13px/1.5 Consolas, monospace; background: #f6f7f9; border: 1px solid var(--nui-linha); border-radius: 6px; padding: 8px 10px; max-height: 260px; overflow-y: auto; margin: 0; } .nui-info { display: block; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; background: var(--nui-info-fundo); color: #0a4f78; border: 1px solid #c9dcf0; } .nui-info-ok { background: var(--nui-ok-fundo); color: var(--nui-ok); border-color: #b9dcc0; } .nui-info-atencao { background: var(--nui-atencao-fundo); color: #7a4d00; border-color: #f0d49a; } .nui-info-erro { background: var(--nui-erro-fundo); color: var(--nui-erro); border-color: #f2b8b2; } .nui-num { font-variant-numeric: tabular-nums; } .nui-suave { color: var(--nui-suave); } .nui-forte-erro { color: var(--nui-erro); font-weight: 700; } .nui-estado { text-align: center; padding: 28px 16px; border: 1px dashed var(--nui-linha); border-radius: 8px; color: var(--nui-suave); background: var(--nui-painel); } .nui-estado > b { display: block; color: var(--nui-texto); margin-bottom: 4px; } .nui-estado > p { margin: 0 0 10px; } .nui-estado-erro { border-style: solid; border-color: #f2b8b2; background: var(--nui-erro-fundo); } .nui-estado-erro > b { color: var(--nui-erro); } .nui-estado-sem-acesso { border-style: solid; border-color: #f0d49a; background: var(--nui-atencao-fundo); } @media (max-width: 1300px) { .nui-duas-colunas { grid-template-columns: minmax(0, 1fr); } } @media (max-width: 560px) { .nui-par { grid-template-columns: minmax(0, 1fr); } .nui-barra input[type=text], .nui-barra input[type=search] { width: 100%; } } /* Campo de pesquisa (Nitron.ui.pesquisa) */ .nui-pq { display: flex; flex-direction: column; gap: 2px; min-width: 0; font: var(--nui-fonte); } .nui-pq-linha { display: flex; min-width: 0; } .nui-pq-linha input { flex: 1 1 auto; width: 100%; min-width: 0; height: 36px; padding: 0 10px; border: 1px solid var(--nui-linha); border-right: 0; border-radius: 6px 0 0 6px; background: #fff; font-size: 14px; color: var(--nui-texto); box-sizing: border-box; } .nui-pq-linha input:focus { outline: none; border-color: var(--nui-destaque); } .nui-pq-lupa { flex: none; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--nui-linha); border-radius: 0 6px 6px 0; background: #f4f6f9; color: var(--nui-suave); cursor: pointer; padding: 0; } .nui-pq-lupa:hover:not(:disabled) { background: #e3effa; color: var(--nui-destaque); } .nui-pq-lupa:disabled { opacity: .5; cursor: not-allowed; } .nui-pq-desc { min-height: 16px; font-size: 12px; color: var(--nui-suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .nui-pq-invalido .nui-pq-linha input, .nui-pq-invalido .nui-pq-lupa { border-color: var(--nui-erro); } .nui-pq-invalido .nui-pq-desc { color: var(--nui-erro); } .nui-pq-lista { position: fixed; z-index: 9050; margin: 0; padding: 4px 0; list-style: none; max-height: 280px; overflow-y: auto; background: #fff; border: 1px solid var(--nui-linha); border-radius: 6px; box-shadow: 0 8px 24px rgba(0, 0, 0, .15); font: var(--nui-fonte); color: var(--nui-texto); box-sizing: border-box; } .nui-pq-lista li { padding: 6px 10px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .nui-pq-lista li b { display: inline-block; min-width: 56px; font-variant-numeric: tabular-nums; } .nui-pq-lista li.nui-pq-marcado, .nui-pq-lista li[data-i]:hover { background: #e3effa; } .nui-pq-nada { color: var(--nui-suave); cursor: default !important; padding: 10px; margin: 0; } .nui-pq-modal { display: flex; flex-direction: column; gap: 10px; } .nui-pq-busca { font: inherit; height: 36px; padding: 0 10px; border: 1px solid var(--nui-linha); border-radius: 6px; width: 100%; box-sizing: border-box; } .nui-pq-busca:focus { outline: none; border-color: var(--nui-destaque); } .nui-pq-res { max-height: 50vh; overflow-y: auto; border: 1px solid var(--nui-linha); border-radius: 6px; } .nui-pq-res table { width: 100%; border-collapse: collapse; } .nui-pq-res td { padding: 6px 10px; border-bottom: 1px solid #edf0f4; cursor: pointer; } .nui-pq-res tr:hover td, .nui-pq-res tr.nui-pq-marcado td { background: #e3effa; } .nui-pq-cod { width: 80px; font-weight: 600; font-variant-numeric: tabular-nums; }";
   (document.head || document.documentElement).appendChild(s);
 })();
 /* Nitron.fmt — mesma formatação do PCP (lib/format.ts): fuso de São Paulo, vazio = "—". */
@@ -1378,4 +1378,271 @@
   }
 
   N.ui.grade = grade;
+})(window.Nitron);
+
+/* Nitron.ui.pesquisa — campo de escolha com pesquisa, como o do Sankhya: digita o código ou parte do nome e aparece a
+   lista; a lupa (ou F3) abre a pesquisa completa; ao sair do campo, o código é conferido (não existe ou inativo = vermelho).
+   Os dados vêm do CRUDServiceProvider.loadRecords da entidade do dicionário, com a permissão de quem está logado.
+
+   var p = Nitron.ui.pesquisa(document.querySelector("#natureza"), {
+     tipo: "natureza",                       // natureza · centroResultado · tipoNegociacao · top · produto · parceiro · empresa
+     filtro: "this.TIPMOV = 'O'",            // soma ao filtro do tipo (ex.: só TOP de pedido de compra)
+     valor: 3010105,                         // código inicial (opcional)
+     aoEscolher: function (codigo, registro) { ... }   // código (número) ou null quando limpa ou não acha
+   });
+   p.valor();  p.definir(10501);  p.registro();  p.valido();  p.focar();  p.habilitar(false);  p.destruir();
+
+   Tipo próprio: { entidade: "Veiculo", codigo: "CODVEICULO", descricao: "PLACA", where: "this.ATIVO = 'S'", extra: ["MARCAMODELO"] }.
+   Tabela versionada (TGFTPV, TGFTOP): versionada: true pega só a última DHALTER de cada código.
+
+   O alvo pode ser um <input> (vira o campo) ou um elemento vazio (o campo nasce dentro dele). Em tela Vue, use um
+   elemento vazio no template e grave o código no estado pelo aoEscolher: o Vue não mexe em filho que não criou. */
+(function (N) {
+  var S = N.sankhya, esc = N.ui.esc;
+
+  var TIPOS = {
+    natureza: { entidade: "Natureza", codigo: "CODNAT", descricao: "DESCRNAT", where: "this.ANALITICA = 'S' AND this.ATIVA = 'S'", titulo: "Natureza" },
+    centroResultado: { entidade: "CentroResultado", codigo: "CODCENCUS", descricao: "DESCRCENCUS", where: "this.ANALITICO = 'S' AND this.ATIVO = 'S'", titulo: "Centro de resultado" },
+    tipoNegociacao: { entidade: "TipoNegociacao", codigo: "CODTIPVENDA", descricao: "DESCRTIPVENDA", tabela: "TGFTPV", versionada: true, titulo: "Tipo de negociação" },
+    top: { entidade: "TipoOperacao", codigo: "CODTIPOPER", descricao: "DESCROPER", tabela: "TGFTOP", versionada: true, extra: ["TIPMOV"], titulo: "Tipo de operação (TOP)" },
+    produto: { entidade: "Produto", codigo: "CODPROD", descricao: "DESCRPROD", where: "this.ATIVO = 'S'", extra: ["CODVOL"], titulo: "Produto" },
+    parceiro: { entidade: "Parceiro", codigo: "CODPARC", descricao: "NOMEPARC", where: "this.ATIVO = 'S'", titulo: "Parceiro" },
+    empresa: { entidade: "Empresa", codigo: "CODEMP", descricao: "NOMEFANTASIA", titulo: "Empresa" }
+  };
+
+  var LUPA = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+
+  function aspas(s) { return String(s).replace(/'/g, "''"); }
+  function soDigitos(s) { return /^\d{1,12}$/.test(String(s).trim()); }
+
+  /* Monta o where: filtro do tipo + filtro da tela + o que foi digitado (código exato/começando ou palavras na descrição). */
+  function montarWhere(t, texto, exato) {
+    var partes = [];
+    if (t.where) partes.push("(" + t.where + ")");
+    if (t.filtro) partes.push("(" + t.filtro + ")");
+    if (t.versionada) partes.push("this.DHALTER = (SELECT MAX(V.DHALTER) FROM " + t.tabela + " V WHERE V." + t.codigo + " = this." + t.codigo + ")");
+    if (t.versionada && t.ativo !== false) partes.push("this.ATIVO = 'S'");
+    texto = String(texto == null ? "" : texto).trim();
+    if (exato) partes.push("this." + t.codigo + " = " + Number(texto));
+    else if (texto) {
+      var palavras = texto.toUpperCase().split(/\s+/).filter(Boolean).slice(0, 5);
+      var desc = palavras.map(function (p) { return "UPPER(this." + t.descricao + ") LIKE '%" + aspas(p) + "%'"; }).join(" AND ");
+      partes.push(soDigitos(texto) ? "(this." + t.codigo + " = " + Number(texto) + " OR TO_CHAR(this." + t.codigo + ") LIKE '" + texto + "%' OR (" + desc + "))" : "(" + desc + ")");
+    }
+    return partes.join(" AND ");
+  }
+
+  async function buscar(t, texto, max, exato) {
+    var campos = [t.codigo, t.descricao].concat(t.extra || []);
+    if (t.versionada) campos.push("DHALTER");
+    var regs = await S.loadRecords(t.entidade, {
+      campos: campos.join(","), where: montarWhere(t, texto, exato), ordem: exato ? "" : "this." + t.descricao, max: max || 20, numericos: [t.codigo]
+    });
+    var vistos = {};
+    return regs.filter(function (r) { if (vistos[r[t.codigo]]) return false; vistos[r[t.codigo]] = 1; return true; })
+      .map(function (r) { return { codigo: r[t.codigo], descricao: r[t.descricao] || "", registro: r }; });
+  }
+
+  function pesquisa(alvo, o) {
+    o = o || {};
+    var t = Object.assign({}, TIPOS[o.tipo] || {}, o);
+    if (!t.entidade || !t.codigo || !t.descricao) throw new Error("Nitron.ui.pesquisa: informe tipo (" + Object.keys(TIPOS).join(", ") + ") ou entidade, codigo e descricao.");
+
+    var caixa = document.createElement("div");
+    caixa.className = "nui-pq";
+    var input;
+    if (alvo.tagName === "INPUT") { input = alvo; alvo.parentNode.insertBefore(caixa, alvo); }
+    else { input = document.createElement("input"); alvo.appendChild(caixa); }
+    input.type = "text";
+    input.autocomplete = "off";
+    input.setAttribute("role", "combobox");
+    input.setAttribute("aria-autocomplete", "list");
+    if (o.placeholder) input.placeholder = o.placeholder;
+    var linha = document.createElement("div");
+    linha.className = "nui-pq-linha";
+    var lupa = document.createElement("button");
+    lupa.type = "button";
+    lupa.className = "nui-pq-lupa";
+    lupa.title = "Pesquisar " + (t.titulo || "") + " (F3)";
+    lupa.setAttribute("aria-label", lupa.title);
+    lupa.innerHTML = LUPA;
+    var desc = document.createElement("div");
+    desc.className = "nui-pq-desc";
+    linha.appendChild(input);
+    linha.appendChild(lupa);
+    caixa.appendChild(linha);
+    caixa.appendChild(desc);
+
+    var lista = document.createElement("ul");
+    lista.className = "nui-pq-lista";
+    lista.setAttribute("role", "listbox");
+    lista.hidden = true;
+
+    var atual = null, estado = null, itens = [], marcado = -1, timer = 0, seq = 0, conferido = "";
+
+    function mostrar(reg, st, msg) {
+      atual = reg; estado = st;
+      caixa.classList.toggle("nui-pq-invalido", st === false);
+      desc.textContent = msg != null ? msg : (reg ? reg.descricao : "");
+      desc.title = desc.textContent;
+    }
+    function escolher(reg, avisar) {
+      input.value = reg ? String(reg.codigo) : "";
+      conferido = input.value;
+      mostrar(reg, reg ? true : null);
+      fecharLista();
+      if (avisar !== false && o.aoEscolher) o.aoEscolher(reg ? reg.codigo : null, reg ? reg.registro : null);
+    }
+
+    function posicionar() {
+      var r = input.getBoundingClientRect();
+      lista.style.left = r.left + "px";
+      lista.style.top = r.bottom + 2 + "px";
+      lista.style.width = Math.max(r.width + lupa.offsetWidth, 320) + "px";
+    }
+    function abrirLista(regs, texto) {
+      itens = regs; marcado = regs.length ? 0 : -1;
+      lista.innerHTML = regs.length ? regs.map(function (r, i) {
+        return '<li role="option" data-i="' + i + '"' + (i === marcado ? ' class="nui-pq-marcado"' : "") + '><b>' + esc(r.codigo) + "</b> " + esc(r.descricao) + "</li>";
+      }).join("") : '<li class="nui-pq-nada">Nada encontrado para "' + esc(texto) + '".</li>';
+      if (!lista.parentNode) document.body.appendChild(lista);
+      posicionar();
+      lista.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+    function fecharLista() { lista.hidden = true; input.setAttribute("aria-expanded", "false"); }
+    function marcar(i) {
+      if (!itens.length) return;
+      marcado = (i + itens.length) % itens.length;
+      Array.prototype.forEach.call(lista.children, function (li, k) { li.classList.toggle("nui-pq-marcado", k === marcado); });
+      var li = lista.children[marcado];
+      if (li && li.scrollIntoView) li.scrollIntoView({ block: "nearest" });
+    }
+
+    async function sugerir() {
+      var texto = input.value.trim(), meu = ++seq;
+      if (!texto) { fecharLista(); return; }
+      try {
+        var regs = await buscar(t, texto, 20);
+        if (meu === seq && document.activeElement === input) abrirLista(regs, texto);
+      } catch (e) { if (meu === seq) mostrar(null, false, "Falha na pesquisa: " + (e.message || e)); }
+    }
+
+    /* Ao sair do campo: confere o que ficou digitado. Código que não existe (ou inativo) fica vermelho. */
+    async function conferir() {
+      var texto = input.value.trim();
+      if (texto === conferido) return;
+      if (!texto) { escolher(null); return; }
+      if (!soDigitos(texto)) {
+        var regs = await buscar(t, texto, 2);
+        if (regs.length === 1) return escolher(regs[0]);
+        return abrirPesquisa(texto);
+      }
+      var meu = ++seq;
+      try {
+        var r = await buscar(t, texto, 1, true);
+        if (meu !== seq) return;
+        conferido = texto;
+        if (r.length) escolher(r[0]);
+        else { mostrar(null, false, "Código " + texto + " não existe ou está inativo."); if (o.aoEscolher) o.aoEscolher(null, null); }
+      } catch (e) { mostrar(null, false, "Falha ao conferir: " + (e.message || e)); }
+    }
+
+    /* Pesquisa completa num modal: busca por código ou nome, até 100 linhas. */
+    function abrirPesquisa(inicial) {
+      fecharLista();
+      var corpo = document.createElement("div");
+      corpo.className = "nui-pq-modal";
+      corpo.innerHTML = '<input type="text" class="nui-pq-busca" placeholder="Código ou parte do nome" autocomplete="off"><div class="nui-pq-res"></div>';
+      var busca = corpo.querySelector("input"), res = corpo.querySelector(".nui-pq-res"), regs = [], sel = 0, meu = 0;
+      busca.value = inicial != null ? inicial : (estado ? "" : input.value.trim());
+      var m = N.ui.modal({ titulo: "Pesquisar " + (t.titulo || t.entidade), conteudo: corpo, tamanho: "m", botoes: [{ texto: "Fechar", acao: "fechar" }],
+        aoFechar: function () { setTimeout(function () { input.focus(); }, 0); } });
+      function desenhar() {
+        res.innerHTML = regs.length ? '<table><tbody>' + regs.map(function (r, i) {
+          return '<tr data-i="' + i + '"' + (i === sel ? ' class="nui-pq-marcado"' : "") + '><td class="nui-pq-cod">' + esc(r.codigo) + "</td><td>" + esc(r.descricao) + "</td></tr>";
+        }).join("") + "</tbody></table>" : '<p class="nui-pq-nada">Nada encontrado.</p>';
+      }
+      async function carregar() {
+        var eu = ++meu;
+        res.innerHTML = '<p class="nui-pq-nada"><span class="nui-roda"></span>Pesquisando…</p>';
+        try { var r = await buscar(t, busca.value, 100); if (eu === meu) { regs = r; sel = 0; desenhar(); } }
+        catch (e) { if (eu === meu) res.innerHTML = '<p class="nui-pq-nada nui-g-erro">' + esc(e.message || e) + "</p>"; }
+      }
+      var tm = 0;
+      busca.addEventListener("input", function () { clearTimeout(tm); tm = setTimeout(carregar, 300); });
+      busca.addEventListener("keydown", function (ev) {
+        if (ev.key === "ArrowDown" || ev.key === "ArrowUp") { ev.preventDefault(); if (regs.length) { sel = (sel + (ev.key === "ArrowDown" ? 1 : -1) + regs.length) % regs.length; desenhar(); } }
+        else if (ev.key === "Enter" && regs[sel]) { ev.preventDefault(); escolher(regs[sel]); m.fechar(); }
+      });
+      res.addEventListener("click", function (ev) {
+        var tr = ev.target.closest("tr[data-i]");
+        if (tr) { escolher(regs[+tr.getAttribute("data-i")]); m.fechar(); }
+      });
+      carregar();
+    }
+
+    input.addEventListener("input", function () {
+      if (estado !== null) mostrar(null, null, "");
+      clearTimeout(timer);
+      timer = setTimeout(sugerir, 250);
+    });
+    input.addEventListener("keydown", function (ev) {
+      if (ev.key === "F3") { ev.preventDefault(); abrirPesquisa(); return; }
+      if (lista.hidden) return;
+      if (ev.key === "ArrowDown") { ev.preventDefault(); marcar(marcado + 1); }
+      else if (ev.key === "ArrowUp") { ev.preventDefault(); marcar(marcado - 1); }
+      else if (ev.key === "Enter" && itens[marcado]) { ev.preventDefault(); escolher(itens[marcado]); }
+      else if (ev.key === "Escape") { ev.preventDefault(); ev.stopPropagation(); fecharLista(); }
+    });
+    input.addEventListener("blur", function () {
+      setTimeout(function () { if (document.activeElement !== input) { fecharLista(); clearTimeout(timer); conferir(); } }, 150);
+    });
+    lista.addEventListener("mousedown", function (ev) {
+      ev.preventDefault();
+      var li = ev.target.closest("li[data-i]");
+      if (li) escolher(itens[+li.getAttribute("data-i")]);
+    });
+    lupa.addEventListener("click", function () { abrirPesquisa(); });
+    function aoRolar(ev) { if (!lista.hidden && ev.target !== lista && !lista.contains(ev.target)) posicionar(); }
+    window.addEventListener("scroll", aoRolar, true);
+    window.addEventListener("resize", aoRolar);
+
+    var api = {
+      el: caixa,
+      input: input,
+      valor: function () { return atual ? atual.codigo : (soDigitos(input.value) ? Number(input.value) : null); },
+      registro: function () { return atual ? atual.registro : null; },
+      valido: function () { return estado; },
+      /** Grava o código sem chamar aoEscolher e devolve a promessa da conferência. */
+      definir: async function (codigo) {
+        var meu = ++seq;
+        if (codigo == null || codigo === "") { escolher(null, false); return null; }
+        input.value = String(codigo);
+        try {
+          var r = await buscar(t, codigo, 1, true);
+          if (meu !== seq) return null;
+          conferido = input.value;
+          if (r.length) { mostrar(r[0], true); return r[0].registro; }
+          mostrar(null, false, "Código " + codigo + " não existe ou está inativo.");
+        } catch (e) { mostrar(null, false, "Falha ao conferir: " + (e.message || e)); }
+        return null;
+      },
+      focar: function () { input.focus(); },
+      habilitar: function (sim) { input.disabled = !sim; lupa.disabled = !sim; },
+      destruir: function () {
+        window.removeEventListener("scroll", aoRolar, true);
+        window.removeEventListener("resize", aoRolar);
+        if (lista.parentNode) lista.parentNode.removeChild(lista);
+        if (caixa.parentNode) caixa.parentNode.removeChild(caixa);
+      }
+    };
+    linha.insertBefore(input, lupa);
+    if (o.valor != null && o.valor !== "") api.definir(o.valor);
+    return api;
+  }
+
+  pesquisa.tipos = TIPOS;
+  pesquisa._montarWhere = montarWhere;
+  N.ui.pesquisa = pesquisa;
 })(window.Nitron);

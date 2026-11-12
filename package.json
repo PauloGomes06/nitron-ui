@@ -1,7 +1,7 @@
 {
   "name": "nitron-ui",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Biblioteca das telas HTML5 do Sankhya da Nitron: chamadas ao gateway, modal, avisos e formatação",
   "private": true,
-  "scripts": { "build": "node build.mjs", "teste": "node teste/format.test.mjs" }
+  "scripts": { "build": "node build.mjs", "teste": "node teste/format.test.mjs && node teste/pesquisa.test.mjs" }
 }

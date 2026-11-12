@@ -127,6 +127,27 @@ da tela fica só com o que é exclusivo dela. Só classes **novas**: telas antig
   pega a 1.5.x guardada do mesmo dia (o `?d=` só renova uma vez por dia).
 - **Cores** só pelas variáveis `--nui-*`, sempre em par cor + fundo (`--nui-ok` / `--nui-ok-fundo`…). Número com `.nui-num`.
 
+## Campo de pesquisa (1.7.0)
+
+Todo campo de escolha (natureza, centro de resultado, TOP, produto...) usa pesquisa, como no Sankhya: ninguém sabe código de cabeça.
+
+```js
+const nat = U.pesquisa(document.querySelector("#natureza"), {
+  tipo: "natureza",                 // natureza · centroResultado · tipoNegociacao · top · produto · parceiro · empresa
+  filtro: null,                     // soma ao filtro do tipo, ex.: top com "this.TIPMOV = 'O'"
+  valor: 3010105,                   // código inicial (opcional)
+  aoEscolher: (codigo, registro) => { estado.codNat = codigo; }   // null quando limpa ou o código não existe
+});
+nat.valor(); nat.definir(3010104); nat.valido(); nat.destruir();
+```
+
+Digita código ou parte do nome e aparece a lista (setas + Enter); a lupa ou **F3** abre a pesquisa completa; ao sair do campo
+o código é conferido e, se não existe ou está inativo, fica vermelho com o motivo (`valido() === false`: a tela não deve gravar).
+Os dados vêm do `loadRecords` da entidade, com a permissão de quem está logado; natureza e centro de resultado só analíticos e
+ativos; TGFTPV e TGFTOP só a última versão (DHALTER) ativa. Tipo próprio: `{ entidade, codigo, descricao, where, extra, versionada, tabela }`.
+**Em tela Vue**, passe um elemento vazio do template (o campo nasce dentro dele, e o Vue não mexe em filho que não criou), grave o
+código no estado pelo `aoEscolher` e chame `destruir()` quando o painel fechar (a lista de sugestões fica no `body`).
+
 ## Desenvolver
 
 `src/` → `node build.mjs` → `dist/nitron-ui.js`. Testes: `node teste/format.test.mjs`, `node teste/pref.test.mjs` e `demo/index.html`
