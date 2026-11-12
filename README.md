@@ -144,7 +144,7 @@ nat.valor(); nat.definir(3010104); nat.valido(); nat.destruir();
 Digita código ou parte do nome e aparece a lista (setas + Enter); a lupa ou **F3** abre a pesquisa completa; ao sair do campo
 o código é conferido e, se não existe ou está inativo, fica vermelho com o motivo (`valido() === false`: a tela não deve gravar).
 Os dados vêm do `loadRecords` da entidade, com a permissão de quem está logado; natureza e centro de resultado só analíticos e
-ativos; TGFTPV e TGFTOP só a última versão (DHALTER) ativa. Tipo próprio: `{ entidade, codigo, descricao, where, extra, versionada, tabela }`.
+ativos; TGFTPV e TGFTOP só a última versão (DHALTER) ativa; a busca ignora acento ("producao" acha "Produção", 1.7.1). Tipo próprio: `{ entidade, codigo, descricao, where, extra, versionada, tabela }`.
 **Em tela Vue**, passe um elemento vazio do template (o campo nasce dentro dele, e o Vue não mexe em filho que não criou), grave o
 código no estado pelo `aoEscolher` e chame `destruir()` quando o painel fechar (a lista de sugestões fica no `body`).
 

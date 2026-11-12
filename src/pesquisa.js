@@ -31,6 +31,11 @@
   var LUPA = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
 
   function aspas(s) { return String(s).replace(/'/g, "''"); }
+  /* Busca sem acento dos dois lados: o texto digitado perde o acento aqui e a descrição no Oracle (TRANSLATE com UNISTR,
+     para a requisição seguir só em ASCII). "producao" acha "Produção". */
+  function semAcento(s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+  var COM = "\\00C1\\00C0\\00C3\\00C2\\00C4\\00C9\\00C8\\00CA\\00CB\\00CD\\00CC\\00CE\\00CF\\00D3\\00D2\\00D5\\00D4\\00D6\\00DA\\00D9\\00DB\\00DC\\00C7";
+  function descSql(campo) { return "TRANSLATE(UPPER(this." + campo + "), UNISTR('" + COM + "'), 'AAAAAEEEEIIIIOOOOOUUUUC')"; }
   function soDigitos(s) { return /^\d{1,12}$/.test(String(s).trim()); }
 
   /* Monta o where: filtro do tipo + filtro da tela + o que foi digitado (código exato/começando ou palavras na descrição). */
@@ -43,8 +48,8 @@
     texto = String(texto == null ? "" : texto).trim();
     if (exato) partes.push("this." + t.codigo + " = " + Number(texto));
     else if (texto) {
-      var palavras = texto.toUpperCase().split(/\s+/).filter(Boolean).slice(0, 5);
-      var desc = palavras.map(function (p) { return "UPPER(this." + t.descricao + ") LIKE '%" + aspas(p) + "%'"; }).join(" AND ");
+      var palavras = semAcento(texto).toUpperCase().split(/\s+/).filter(Boolean).slice(0, 5);
+      var desc = palavras.map(function (p) { return descSql(t.descricao) + " LIKE '%" + aspas(p) + "%'"; }).join(" AND ");
       partes.push(soDigitos(texto) ? "(this." + t.codigo + " = " + Number(texto) + " OR TO_CHAR(this." + t.codigo + ") LIKE '" + texto + "%' OR (" + desc + "))" : "(" + desc + ")");
     }
     return partes.join(" AND ");
@@ -162,7 +167,7 @@
         if (meu !== seq) return;
         conferido = texto;
         if (r.length) escolher(r[0]);
-        else { mostrar(null, false, "Código " + texto + " não existe ou está inativo."); if (o.aoEscolher) o.aoEscolher(null, null); }
+        else { mostrar(null, false, "Código " + texto + " não pode ser usado aqui (não existe, está inativo" + (t.where && /ANALITIC/.test(t.where) ? ", é sintético" : "") + (t.filtro ? " ou fora do filtro desta tela" : "") + ")."); if (o.aoEscolher) o.aoEscolher(null, null); }
       } catch (e) { mostrar(null, false, "Falha ao conferir: " + (e.message || e)); }
     }
 
@@ -242,7 +247,7 @@
           if (meu !== seq) return null;
           conferido = input.value;
           if (r.length) { mostrar(r[0], true); return r[0].registro; }
-          mostrar(null, false, "Código " + codigo + " não existe ou está inativo.");
+          mostrar(null, false, "Código " + codigo + " não pode ser usado aqui (não existe, está inativo" + (t.where && /ANALITIC/.test(t.where) ? ", é sintético" : "") + (t.filtro ? " ou fora do filtro desta tela" : "") + ").");
         } catch (e) { mostrar(null, false, "Falha ao conferir: " + (e.message || e)); }
         return null;
       },
